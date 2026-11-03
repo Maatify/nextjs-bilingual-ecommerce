@@ -1,0 +1,8 @@
+/*
+ * Storefront stylesheet = globals.css minus the utility classes only the admin dashboard uses.
+ * Tailwind scans the whole project by default, so the dashboard's classes used to ship in every storefront
+ * page's render-blocking CSS. The admin layout keeps importing globals.css (full scan) — nothing changes there.
+ */
+@import "./globals.css";
+@source not "./admin";
+@source not "../components/admin";

@@ -1,0 +1,15 @@
+# never upload: local DB/uploads, secrets, build output, backups and test artifacts
+node_modules
+.next
+data
+.env*
+!.env.example
+_image_backup
+_unused_assets
+shots
+test-results
+playwright-report
+.lighthouseci
+.test-data
+.e2e-data
+*.tsbuildinfo

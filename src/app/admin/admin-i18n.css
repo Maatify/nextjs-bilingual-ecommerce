@@ -1,0 +1,50 @@
+/*
+ * Admin Arabic / RTL typography. The `.admin` root carries lang + dir from the cookie
+ * (src/app/admin/layout.tsx). Arabic glyphs come from Cairo (loaded only for ar);
+ * Latin text and digits keep Geist so numbers look identical in both languages.
+ */
+.admin:lang(ar) {
+  font-family: var(--font-geist), var(--font-ar-sans), ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.6;
+}
+/* Arabic is never letter-spaced or uppercased (a broken-up script loses its joins) */
+.admin:lang(ar) :where(*):not(:lang(en)):not(kbd):not(code) {
+  letter-spacing: normal !important;
+}
+.admin:lang(ar) .uppercase:not(:lang(en)) {
+  text-transform: none;
+}
+/* headings: a touch more weight and room for Arabic ascenders/descenders */
+.admin:lang(ar) :is(h1, h2, h3) {
+  line-height: 1.45;
+}
+.admin:lang(ar) h1 {
+  font-weight: 700;
+}
+/* inputs holding Latin/numbers inside RTL forms */
+.admin input[type="number"],
+.admin input[type="tel"],
+.admin input[type="email"],
+.admin input[type="url"] {
+  direction: ltr;
+}
+.admin[dir="rtl"] input[type="number"],
+.admin[dir="rtl"] input[type="tel"],
+.admin[dir="rtl"] input[type="email"],
+.admin[dir="rtl"] input[type="url"] {
+  text-align: end;
+}
+
+/* language switch: a soft crossfade of the whole page (see AdminI18nProvider) */
+html.a-lang-vt::view-transition-old(root) {
+  animation: 260ms cubic-bezier(0.22, 1, 0.36, 1) both a-lang-out;
+}
+html.a-lang-vt::view-transition-new(root) {
+  animation: 380ms cubic-bezier(0.22, 1, 0.36, 1) 60ms both a-lang-in;
+}
+@keyframes a-lang-out {
+  to { opacity: 0; }
+}
+@keyframes a-lang-in {
+  from { opacity: 0; }
+}

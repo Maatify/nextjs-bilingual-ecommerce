@@ -1,0 +1,51 @@
+# Full check on every PR and push to main: lint, typecheck, unit tests and a production build, then the browser,
+# security and Lighthouse checks against that build.
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      # throwaway values for CI only: the build seeds a fresh SQLite store in data/
+      ADMIN_PASSWORD: ci-only-${{ github.run_id }}-pass
+      # the tests run the production build over plain http://localhost; without this flag the CSP's
+      # upgrade-insecure-requests makes WebKit fetch every asset over https (see next.config.ts)
+      ADMIN_INSECURE_COOKIE: "1"
+      NEXT_PUBLIC_SITE_URL: https://example.com
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium firefox webkit
+      - run: npm run check
+      - name: Start production server
+        run: |
+          nohup npx next start -p 3000 > next-start.log 2>&1 &
+          npx -y wait-on@8.0.3 -t 60000 http://localhost:3000
+      - run: npm run security:check
+        env: { BASE_URL: "http://localhost:3000" }
+      - run: npm run test:smoke
+        env: { BASE_URL: "http://localhost:3000" }
+      - run: npm run test:site
+        env: { BASE_URL: "http://localhost:3000" }
+      - run: npm run test:e2e
+        env: { BASE_URL: "http://localhost:3000" }
+      # Lighthouse CI starts its own server on :3999 (lighthouserc.json)
+      - run: npm run lighthouse
+      - name: Upload test reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reports
+          path: |
+            next-start.log
+            test-results/
+            .lighthouseci/
+          if-no-files-found: ignore

@@ -1,0 +1,26 @@
+const login = {
+  metaTitle: "Sign in",
+  welcome: "Welcome back",
+  subtitle: "Sign in to manage the VERDA store.",
+  code: "Authentication code",
+  codeHelp: "Enter the 6-digit code from your authenticator app, or one of your recovery codes.",
+  password: "Admin password",
+  showPassword: "Show password",
+  hidePassword: "Hide password",
+  verify: "Verify",
+  signIn: "Sign in",
+  twoFactorOn: "Two-factor authentication is on for this store.",
+  protected: "Protected by rate limiting and optional two-factor authentication.",
+  seconds: { one: "{count} second", other: "{count} seconds" },
+  minutes: { one: "{count} minute", other: "{count} minutes" },
+  errors: {
+    noPassword: "ADMIN_PASSWORD is not set on the server.",
+    wrongPassword: "Wrong password.",
+    attemptsLeft: { one: "Wrong password. {count} attempt left before a temporary lockout.", other: "Wrong password. {count} attempts left before a temporary lockout." },
+    locked: "Too many failed attempts. Try again in {time}.",
+    expired: "Sign-in expired — enter your password again.",
+    invalidCode: "Invalid code. Check your authenticator app's clock and try again.",
+    invalidCodeLocked: "Invalid code. Too many attempts — try again in {time}.",
+  },
+};
+export default login;

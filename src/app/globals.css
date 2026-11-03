@@ -1,0 +1,721 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #ecede8;
+  --color-surface: #ffffff;
+  --color-surface-2: #f5f5f1;
+  --color-cream: #f3efe6;
+  --color-ink: #101310;
+  --color-ink-2: #3a3f39;
+  --color-muted: #5f645d;
+  --color-well: #f1f1ee;
+  --color-line: rgb(16 19 16 / 0.09);
+  --color-forest: #1d3a2a;
+  --color-forest-2: #2b5039;
+  --color-sage: #a8b699;
+  --color-sage-soft: #dfe5d6;
+  --color-amber: #f3cf5b;
+  --color-sale: #b3472f;
+  --color-success: #2e7a4a;
+
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
+  --font-display: var(--font-anton), "Arial Narrow", Impact, sans-serif;
+
+  --radius-pill: 999px;
+  --shadow-soft: 0 1px 2px rgb(16 19 16 / 0.04), 0 8px 24px -12px rgb(16 19 16 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(16 19 16 / 0.04), 0 18px 40px -16px rgb(16 19 16 / 0.22);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Admin (dark, Linear/extension-dashboard language) */
+  --color-a-bg: #09090b;
+  --color-a-side: #0d0d10;
+  --color-a-panel: #111115;
+  --color-a-panel-2: #18181e;
+  --color-a-hover: #1f1f26;
+  --color-a-line: #24242c;
+  --color-a-line-strong: #33333d;
+  --color-a-text: #f4f4f6;
+  --color-a-dim: #8c8c99;
+  --color-a-faint: #5f5f6b;
+  --color-a-accent: #b4a5ff;
+  --color-a-violet: #8b74ff;
+  --color-a-pink: #e879f9;
+  --color-a-ok: #4ade80;
+  --color-a-warn: #fb923c;
+  --color-a-danger: #f87171;
+  --color-a-blue: #60a5fa;
+  /* tint ink: white on dark, near-black on light — use for hover/selected washes (bg-a-ink/[0.05]) */
+  --color-a-ink: #ffffff;
+  /* modal / drawer backdrop */
+  --color-a-scrim: #000000;
+  --font-admin: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-ribbon: marquee 28s linear infinite;
+  --animate-ribbon-rev: marquee-rev 32s linear infinite;
+  --animate-shimmer: shimmer 1.6s linear infinite;
+}
+
+/* --mq-dir flips the loop for right-to-left tracks (set on :dir(rtl) below) */
+@keyframes marquee {
+  to { transform: translateX(calc(-50% * var(--mq-dir, 1))); }
+}
+@keyframes marquee-rev {
+  from { transform: translateX(calc(-50% * var(--mq-dir, 1))); }
+  to { transform: translateX(0); }
+}
+@keyframes pop {
+  0% { transform: scale(0.4); }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+@keyframes shimmer {
+  to { transform: translateX(100%); }
+}
+
+:root {
+  color-scheme: light;
+  --gutter: clamp(16px, 4vw, 40px);
+  --header-h: 64px;
+  /* storefront FX tints (the admin overrides these on .admin) */
+  --a-spot: rgb(29 58 42 / 0.06);
+  --a-spot-line: rgb(29 58 42 / 0.22);
+  --a-glare: rgb(255 255 255 / 0.32);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+}
+
+body {
+  overflow-x: clip;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection { background: var(--color-forest); color: #fff; }
+
+/* Default keyboard focus ring. In the base layer so a component's own indicator (`outline-none` + ring,
+   focus-within ring on a wrapper) replaces it instead of stacking an outline on top of the ring. No
+   border-radius here: changing the radius on focus made pills/cards visibly jump shape. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-forest);
+    outline-offset: 2px;
+  }
+}
+
+@utility container-x {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+@utility tap {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+@utility serif-accent {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* Condensed poster type (Threadnova-style headlines, ribbons, big numbers) */
+@utility font-poster {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.005em;
+}
+
+@utility text-mega {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(2.75rem, 1.4rem + 8.4vw, 9.5rem); /* 2.75rem floor: at 3.25rem the longest hero word ran past a 280px screen */
+  line-height: 0.9;
+  letter-spacing: -0.005em;
+}
+
+@utility text-poster {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(2.25rem, 1.5rem + 3.4vw, 4.5rem);
+  line-height: 0.94;
+}
+
+@utility text-display {
+  font-size: clamp(2.5rem, 1.6rem + 4.2vw, 5.75rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+}
+
+@utility text-h1 {
+  font-size: clamp(2rem, 1.5rem + 2.2vw, 3.5rem);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+}
+
+@utility text-h2 {
+  font-size: clamp(1.5rem, 1.2rem + 1.3vw, 2.375rem);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  font-weight: 600;
+}
+
+@utility text-h3 {
+  font-size: clamp(1.125rem, 1.05rem + 0.35vw, 1.375rem);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+}
+
+/* ───────────── Route view transitions (React <ViewTransition>, see fx/page-transition.tsx) ─────────────
+ * Every navigation: the outgoing page content (`.fx-exit`) dissolves for 140ms over the incoming page, which
+ * is already in place underneath (and plays its own first-open enter). The root never crossfades (the chrome —
+ * header, sidebar, footer, tab bar — swaps instantly, so nothing fades twice); the storefront header is pinned;
+ * the product image morphs card → PDP (`.morph`). Opacity/transform only — every pseudo is a composited layer.
+ * The overlay never eats clicks: a tap during the 140ms lands on the new page. Theme/language switches set
+ * their own root animations (html.a-theme-vt / html.a-lang-vt). */
+::view-transition { pointer-events: none; }
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+::view-transition-group(*) {
+  animation-duration: 300ms;
+  animation-timing-function: var(--ease-out-soft);
+}
+::view-transition-old(.fx-exit) {
+  animation: fx-exit 200ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+::view-transition-group(.fx-exit) { animation: none; }
+@keyframes fx-exit {
+  to { opacity: 0; transform: translate3d(0, -12px, 0) scale(0.99); }
+}
+::view-transition-group(.morph) {
+  animation-duration: 320ms;
+  animation-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+  z-index: 3;
+}
+::view-transition-group(site-header) { animation: none; z-index: 4; }
+::view-transition-old(site-header) { display: none; }
+::view-transition-new(site-header) { animation: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* ───────────── Admin shell ───────────── */
+/*
+ * Theme: <div class="admin" data-theme="dark|light|system">. Every admin colour is a
+ * --color-a-* variable, so the light palette only redefines variables.
+ */
+.admin {
+  font-family: var(--font-admin);
+  background: var(--color-a-bg);
+  color: var(--color-a-text);
+  color-scheme: var(--a-scheme, dark);
+  font-feature-settings: "ss01", "cv11", "tnum";
+  --grad: linear-gradient(120deg, #8b74ff 0%, #c86bfa 60%, #e879f9 100%);
+  --a-shadow: rgb(0 0 0 / 0.9);
+  --a-shadow-soft: rgb(0 0 0 / 0.5);
+  --a-grad-text: linear-gradient(120deg, #b4a5ff 0%, #d8a4ff 55%, #f0a8ff 100%);
+  --a-glare: rgb(255 255 255 / 0.10);
+  --a-spot: rgb(180 165 255 / 0.10);
+  --a-spot-line: rgb(180 165 255 / 0.35);
+  --a-tone-mix: 100%;
+}
+.admin[data-theme="light"] {
+  --a-scheme: light;
+  --color-a-bg: #f6f6f8;
+  --color-a-side: #fbfbfc;
+  --color-a-panel: #ffffff;
+  --color-a-panel-2: #f4f4f7;
+  --color-a-hover: #ececf1;
+  --color-a-line: #e6e6ec;
+  --color-a-line-strong: #d4d4dd;
+  --color-a-text: #0b0b10;
+  --color-a-dim: #5d5d6b;
+  --color-a-faint: #71717d;
+  --color-a-accent: #6b4fe0;
+  --color-a-violet: #7457f0;
+  --color-a-pink: #a21caf;
+  --color-a-ok: #15803d;
+  --color-a-warn: #b45309;
+  --color-a-danger: #c81e1e;
+  --color-a-blue: #2563eb;
+  --color-a-ink: #0b0b10;
+  --color-a-scrim: rgb(22 18 40 / 0.55);
+  --a-shadow: rgb(28 22 60 / 0.18);
+  --a-shadow-soft: rgb(28 22 60 / 0.10);
+  --a-grad-text: linear-gradient(120deg, #6b4fe0 0%, #9b3fd8 55%, #b02fbf 100%);
+  --a-glare: rgb(255 255 255 / 0.3);
+  --a-spot: rgb(116 87 240 / 0.07);
+  --a-spot-line: rgb(116 87 240 / 0.30);
+  --a-tone-mix: 72%;
+}
+@media (prefers-color-scheme: light) {
+  .admin[data-theme="system"] {
+    --a-scheme: light;
+    --color-a-bg: #f6f6f8;
+    --color-a-side: #fbfbfc;
+    --color-a-panel: #ffffff;
+    --color-a-panel-2: #f4f4f7;
+    --color-a-hover: #ececf1;
+    --color-a-line: #e6e6ec;
+    --color-a-line-strong: #d4d4dd;
+    --color-a-text: #0b0b10;
+    --color-a-dim: #5d5d6b;
+    --color-a-faint: #71717d;
+    --color-a-accent: #6b4fe0;
+    --color-a-violet: #7457f0;
+    --color-a-pink: #a21caf;
+    --color-a-ok: #15803d;
+    --color-a-warn: #b45309;
+    --color-a-danger: #c81e1e;
+    --color-a-blue: #2563eb;
+    --color-a-ink: #0b0b10;
+    --color-a-scrim: rgb(22 18 40 / 0.55);
+    --a-shadow: rgb(28 22 60 / 0.18);
+    --a-shadow-soft: rgb(28 22 60 / 0.10);
+    --a-grad-text: linear-gradient(120deg, #6b4fe0 0%, #9b3fd8 55%, #b02fbf 100%);
+    --a-glare: rgb(255 255 255 / 0.3);
+    --a-spot: rgb(116 87 240 / 0.07);
+    --a-spot-line: rgb(116 87 240 / 0.30);
+    --a-tone-mix: 72%;
+  }
+}
+.admin ::selection { background: rgb(139 116 255 / 0.45); color: var(--color-a-text); }
+/* Dashboard focus ring. In @layer base so component utilities win (inputs with `outline-none` + their own ring
+   show ONE indicator, not outline + ring). The unlayered line reverts the storefront's unlayered :focus-visible
+   (outline colour + forced border-radius, which reshaped round buttons/pills on focus) back to the layered rules. */
+@layer base {
+  .admin :focus-visible { outline: 2px solid var(--color-a-accent); outline-offset: 2px; }
+}
+.admin :focus-visible { outline: revert-layer; outline-offset: revert-layer; border-radius: revert-layer; }
+.admin input, .admin textarea, .admin select { color-scheme: var(--a-scheme, dark); }
+
+@utility a-grad { background-image: linear-gradient(120deg, #8b74ff 0%, #c86bfa 60%, #e879f9 100%); }
+@utility a-grad-text {
+  background-image: var(--a-grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+@utility a-glow { background-image: radial-gradient(120% 90% at 50% 130%, rgb(139 116 255 / 0.12), transparent 60%); }
+@utility a-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-a-line-strong) transparent;
+}
+/* `a-light:` variant — light-theme-only overrides for the rare colour that can't be a token. */
+@custom-variant a-light {
+  &:where(.admin[data-theme="light"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: light) {
+    &:where(.admin[data-theme="system"] *) {
+      @slot;
+    }
+  }
+}
+
+/* Data tones (Stat icons, sparklines): darkened on light backgrounds for contrast. Set --tone inline. */
+@utility a-tone {
+  color: color-mix(in oklab, var(--tone) var(--a-tone-mix, 100%), #000);
+}
+
+/* Theme switch: circular View Transition reveal from the pointer (replaces the default crossfade). */
+html.a-theme-vt::view-transition-old(root),
+html.a-theme-vt::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+html.a-theme-vt::view-transition-new(root) { z-index: 2; }
+
+/* Dashboard page enter (first open per session): short rise + fade. Opacity/transform only (a page-sized
+   filter/perspective layer cost a full re-raster every frame); fill `backwards` so nothing is left on the
+   element afterwards and position:fixed children stay viewport-anchored. */
+@keyframes a-page-in {
+  from { opacity: 0; transform: translate3d(0, 14px, 0); }
+  to { opacity: 1; transform: none; }
+}
+.a-page-enter { animation: a-page-in 340ms var(--ease-out-soft) backwards; }
+.a-page-nav { animation: a-page-in 260ms var(--ease-out-soft) backwards; }
+
+/* Dashboard images bloom from grey to colour as part of a page's FIRST open only: scoped to the entering wrapper
+   (.a-page-enter, present only on a first open) during its first ~0.8s ([data-a-entering], see shell EnterSettle),
+   so images mounted later — filters, pagination, router.refresh — never replay it. Fill `backwards` (no filter left behind). */
+@keyframes fx-img-bloom {
+  from { opacity: 0; transform: scale(1.03); }
+  to { opacity: 1; transform: none; }
+}
+.admin .a-page-enter [data-a-entering] img { animation: fx-img-bloom 320ms var(--ease-out-soft) backwards; }
+html[data-fx-seen] .admin [data-fx-ssr] img { animation: none; }
+
+/* ───────────── FX (shared by dashboard + storefront) ───────────── */
+
+/* Spotlight: cursor-following radial light. Add `fx-spot` + data-spot; FxRuntime writes --mx/--my. */
+/* (no `isolation` here: it would flatten Tilt3D's preserve-3d; the light is a faint overlay above content instead) */
+.fx-spot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), var(--a-spot, rgb(255 255 255 / 0.08)), transparent 45%);
+  transition: opacity 300ms var(--ease-out-soft);
+}
+.fx-spot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  padding: 1px;
+  background: radial-gradient(260px circle at var(--mx, 50%) var(--my, 50%), var(--a-spot-line, rgb(255 255 255 / 0.3)), transparent 60%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  transition: opacity 300ms var(--ease-out-soft);
+}
+@media (hover: hover) and (pointer: fine) {
+  .fx-spot:hover::after, .fx-spot:hover::before { opacity: 1; }
+}
+
+/* Press: depth push + ripple (ripple spans are injected by FxRuntime on pointerdown). */
+.fx-press { overflow: hidden; isolation: isolate; }
+.fx-press:active:not(:disabled) {
+  transform: perspective(600px) translate3d(0, 1px, -14px);
+  box-shadow: 0 1px 2px var(--a-shadow-soft, rgb(0 0 0 / 0.2));
+}
+.fx-ripple {
+  position: absolute;
+  z-index: -1;
+  width: var(--d);
+  height: var(--d);
+  left: 0; /* physical: ripple coords come from getBoundingClientRect */
+  top: 0;
+  translate: var(--rx) var(--ry);
+  border-radius: 999px;
+  pointer-events: none;
+  background: radial-gradient(closest-side, rgb(255 255 255 / 0.35), rgb(255 255 255 / 0.12) 60%, transparent);
+  animation: fx-ripple 560ms var(--ease-out-soft) forwards;
+}
+.admin[data-theme="light"] .fx-press:not(.a-grad) .fx-ripple { background: radial-gradient(closest-side, rgb(116 87 240 / 0.22), rgb(116 87 240 / 0.08) 60%, transparent); }
+@keyframes fx-ripple {
+  from { transform: scale(0); opacity: 1; }
+  to { transform: scale(1); opacity: 0; }
+}
+
+/* Magnetic: FxRuntime sets --mgx/--mgy while the pointer is near; uses `translate` so it composes with :active transform. */
+@layer components {
+  .fx-magnetic {
+    translate: var(--mgx, 0px) var(--mgy, 0px);
+    transition: translate 260ms var(--ease-out-soft), transform 140ms var(--ease-out-soft), box-shadow 200ms var(--ease-out-soft), filter 200ms;
+  }
+}
+
+/* Storefront: product imagery saturates in as it scrolls into view (pure CSS, no JS, never delays LCP:
+   anything already on screen at load is at the end of its range = full colour). */
+/* (removed) scroll-driven grey→colour filter on product images: re-rasterised every image on every scroll frame */
+/* colour-only filter (no blur: a blur re-rasterises every image on every scroll frame) */
+@keyframes fx-sat {
+  from { filter: grayscale(1); transform: scale(0.98); }
+  to { filter: none; transform: none; }
+}
+
+/* Load-time saturation bloom (CSS, starts at first paint — no hydration wait; filter/transform only so LCP isn't delayed).
+   Stagger with style="--d: 120ms". */
+@keyframes fx-bloom {
+  from { filter: grayscale(1); transform: scale(0.97); }
+  to { filter: none; transform: none; }
+}
+.fx-bloom { animation: fx-bloom 560ms var(--ease-out-soft) var(--d, 0ms) both; }
+
+/* Storefront page enter (first client-side open of a path — see (store)/template.tsx). Opacity/transform only:
+   the old perspective + blur + saturate version re-rasterised the whole page every frame for 420ms. */
+@keyframes fx-page-in {
+  from { opacity: 0; transform: translate3d(0, 26px, 0) scale(0.992); }
+  to { opacity: 1; transform: none; }
+}
+/* first open of a page (client navigation): the page's sections rise in one after another */
+.fx-page-enter > * { animation: fx-page-in 420ms var(--ease-out-soft) backwards; }
+.fx-page-enter > *:nth-child(2) { animation-delay: 45ms; }
+.fx-page-enter > *:nth-child(3) { animation-delay: 90ms; }
+.fx-page-enter > *:nth-child(4) { animation-delay: 135ms; }
+.fx-page-enter > *:nth-child(n + 5) { animation-delay: 170ms; }
+/* every later visit: one quick, clearly visible rise + fade of the whole page */
+@keyframes fx-page-nav {
+  from { opacity: 0; transform: translate3d(0, 12px, 0); }
+  to { opacity: 1; transform: none; }
+}
+.fx-page-nav { animation: fx-page-nav 260ms var(--ease-out-soft) backwards; }
+/* First, server-rendered open of a page: the same rise but no opacity, so the LCP image paints at once.
+   <html data-fx-seen> (set pre-paint by FX_BOOT_SCRIPT) means this path was already opened this session → no replay. */
+/* Full page load (first visit / refresh): the page rises into place as the opening curtain lifts (curtain.tsx),
+   so it plays on every refresh. Transform only — no opacity — so the LCP image paints at once under the curtain. */
+@keyframes fx-page-in-ssr {
+  from { transform: translate3d(0, 46px, 0) scale(0.985); }
+  to { transform: none; }
+}
+.fx-page-enter-ssr { animation: fx-page-in-ssr 1000ms cubic-bezier(0.22, 1, 0.36, 1) 1080ms backwards; transform-origin: 50% 0; }
+/* hero image blooms still only play on the first open of the page this session */
+html[data-fx-seen] [data-fx-ssr] .fx-bloom { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  .fx-page-enter, .fx-page-enter > *, .fx-page-nav, .fx-page-enter-ssr, .fx-bloom { animation: none; }
+}
+
+/* Marquee row (home reviews): pauses on hover / keyboard focus. */
+.fx-marquee { animation: marquee var(--marquee-dur, 60s) linear infinite; }
+.fx-marquee.fx-rev { animation-name: marquee-rev; }
+.fx-marquee-wrap:hover .fx-marquee, .fx-marquee-wrap:focus-within .fx-marquee { animation-play-state: paused; }
+.fx-fade-x {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .fx-marquee { animation: none !important; translate: none; }
+  .fx-marquee-dup { display: none; }
+}
+
+/* ───────────────────────── Arabic / RTL storefront ─────────────────────────
+ * html[lang=ar] gets the Arabic font variables (app/[lang]/layout.tsx). Arabic is never letter-spaced
+ * or uppercased, and gets a taller line-height; everything Arabic is set in Cairo (the condensed Latin poster face becomes Cairo ExtraBold).
+ */
+html:lang(ar) {
+  --font-sans: var(--font-ar-sans), var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-ar-sans), var(--font-anton), sans-serif;
+  --font-serif: var(--font-ar-sans), var(--font-instrument), ui-serif, serif;
+}
+html:lang(ar) body {
+  font-feature-settings: normal;
+  line-height: 1.65;
+}
+:lang(ar) *,
+:lang(ar) *::placeholder {
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+:lang(ar) .font-poster,
+:lang(ar) .text-poster,
+:lang(ar) .text-mega {
+  font-weight: 800;
+}
+:lang(ar) .text-poster {
+  font-size: clamp(1.9rem, 1.3rem + 2.7vw, 3.75rem);
+  line-height: 1.22;
+}
+:lang(ar) .text-mega {
+  font-size: clamp(2.6rem, 1.2rem + 6.6vw, 7.5rem);
+  line-height: 1.12;
+}
+:lang(ar) .font-poster { line-height: 1.3; }
+:lang(ar) .text-display { line-height: 1.2; }
+:lang(ar) :is(.text-h1, .text-h2) { line-height: 1.3; font-weight: 700; }
+:lang(ar) .text-h3 { line-height: 1.45; font-weight: 700; }
+:lang(ar) .serif-accent { font-style: normal; font-weight: 700; }
+/* utility for Arabic glyphs on English pages (e.g. the "ع" language toggle) */
+.font-arabic { font-family: var(--font-ar-sans, "Cairo"), "Noto Sans Arabic", "Geeza Pro", "Segoe UI", sans-serif; }
+
+/* direction-bearing icons (arrows, chevrons) mirror in RTL — see components/ui/icon.tsx */
+.rtl-flip:dir(rtl) { transform: scaleX(-1); }
+
+/* marquees / ribbons scroll the other way in RTL (keyframes read --mq-dir) */
+[dir="rtl"] { --mq-dir: -1; }
+[dir="ltr"] { --mq-dir: 1; }
+
+/* phone numbers, order numbers, prices, codes stay left-to-right inside Arabic text */
+.ltr-run { direction: ltr; unicode-bidi: isolate; }
+
+/* ───────────── Slanted panels ─────────────
+ * Edges descend from right (high) to left (low) at ~2° — a visual angle, identical in Arabic.
+ * .slant-panel: the white card background is a skewed ::before layer (content stays straight). The layer is
+ *   extended vertically by the skew rise (tan 2° × half the width, capped) so it covers the box at every point
+ *   and nothing inside can poke out of it.
+ * .slant-top: clips the element's top edge to the same angle (footer) and pads the content below it. */
+@layer components {
+  .slant-panel {
+    position: relative;
+    isolation: isolate;
+    --slant-rise: min(1.8vw, 26px);
+  }
+  .slant-panel::before {
+    content: "";
+    position: absolute;
+    inset: calc(-1 * var(--slant-rise)) 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: var(--slant-bg, var(--color-surface));
+    transform: skewY(-2deg);
+    pointer-events: none;
+  }
+  .slant-top {
+    --slant-h: 3.5vw; /* tan(2°) × 100vw */
+    clip-path: polygon(0 var(--slant-h), 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+/* ───────────── Opening curtain (storefront, full page loads only — see components/brand/curtain.tsx) ───────────── */
+.vc-root { position: fixed; inset: 0; z-index: 200; pointer-events: none; overflow: hidden; animation: vc-done 1ms linear 2300ms forwards; }
+.vc-curtain, .vc-under { position: absolute; inset: 0; will-change: transform; }
+.vc-curtain {
+  background: radial-gradient(120% 80% at 50% 0%, #1d2a20 0%, var(--color-ink) 62%);
+  display: grid; place-items: center; overflow: hidden;
+  animation: vc-lift 900ms cubic-bezier(0.76, 0, 0.24, 1) 1050ms forwards;
+  pointer-events: auto; /* swallow clicks only while it covers the page */
+}
+.vc-under { background: var(--color-sage); animation: vc-lift 900ms cubic-bezier(0.76, 0, 0.24, 1) 1160ms forwards; }
+@keyframes vc-lift { to { transform: translate3d(0, -101%, 0); } }
+@keyframes vc-done { to { visibility: hidden; } }
+
+/* the X: two full-width offer tapes crossing at the centre, scrolling in opposite directions */
+.vc-x { position: absolute; inset: 0; display: grid; place-items: center; }
+.vc-tape {
+  position: absolute; left: 50%; top: 50%; width: 170vmax; margin-left: -85vmax; margin-top: -28px;
+  height: 56px; overflow: hidden; display: flex; align-items: center;
+  box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.6);
+  animation: vc-tape-in 700ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+.vc-tape-a { background: var(--color-sage); color: var(--color-ink); transform: rotate(-14deg); }
+.vc-tape-b { background: #f4f2ec; color: var(--color-ink); transform: rotate(14deg); animation-delay: 90ms; }
+.vc-track { display: flex; flex-shrink: 0; white-space: nowrap; animation: vc-scroll 2200ms linear both; }
+.vc-tape-b .vc-track { animation-name: vc-scroll-rev; }
+.vc-item { display: inline-flex; align-items: center; gap: 18px; padding-inline-end: 18px; font-family: var(--font-display); font-size: 24px; text-transform: uppercase; letter-spacing: 0.01em; }
+.vc-star { font-size: 0.85em; }
+html[dir="rtl"] .vc-item { text-transform: none; font-size: 22px; }
+@keyframes vc-tape-in { from { opacity: 0; clip-path: inset(0 50% 0 50%); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
+@keyframes vc-scroll { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-18%, 0, 0); } }
+@keyframes vc-scroll-rev { from { transform: translate3d(-18%, 0, 0); } to { transform: translate3d(0, 0, 0); } }
+
+/* wordmark on top of the X, on a soft ink halo so it stays readable over the tapes */
+.vc-mark {
+  position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 14px; color: #fff;
+  padding: 26px 46px 22px; border-radius: 28px; background: radial-gradient(closest-side, rgb(16 19 16 / 0.92), rgb(16 19 16 / 0.75) 70%, transparent);
+  animation: vc-mark-out 520ms cubic-bezier(0.5, 0, 0.75, 0) 960ms forwards;
+}
+.vc-word { font-family: var(--font-anton), "Arial Narrow", Impact, sans-serif; direction: ltr; unicode-bidi: isolate; font-size: clamp(64px, 18vw, 168px); line-height: 0.9; letter-spacing: 0.01em; animation: vc-word-in 760ms cubic-bezier(0.22, 1, 0.36, 1) 80ms backwards; }
+.vc-dot { color: var(--color-sage); }
+.vc-line { width: clamp(90px, 16vw, 200px); height: 3px; border-radius: 3px; background: var(--color-sage); animation: vc-line-in 620ms cubic-bezier(0.22, 1, 0.36, 1) 260ms backwards; }
+.vc-tag { font-family: var(--font-sans); font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase; color: rgb(255 255 255 / 0.7); animation: vc-fade-up 560ms cubic-bezier(0.22, 1, 0.36, 1) 380ms backwards; }
+html[dir="rtl"] .vc-tag { letter-spacing: 0; text-transform: none; font-size: 15px; }
+/* 0.001, not 0: identical on screen (< 1/255 of a colour step), but Chrome only counts a text as painted (LCP) once
+   its opacity is above 0 — from 0 the wordmark's LCP landed at the end of the fade, ~0.9 s after first paint */
+@keyframes vc-word-in { from { opacity: 0.001; transform: translate3d(0, 36px, 0) scale(0.96); } }
+@keyframes vc-line-in { from { transform: scaleX(0); } }
+@keyframes vc-fade-up { from { opacity: 0; transform: translate3d(0, 12px, 0); } }
+@keyframes vc-mark-out { to { opacity: 0; transform: translate3d(0, -40px, 0); } }
+
+@media (max-width: 640px) {
+  .vc-tape { height: 44px; margin-top: -22px; }
+  .vc-item { font-size: 18px; gap: 12px; padding-inline-end: 12px; }
+  .vc-tape-a { transform: rotate(-22deg); }
+  .vc-tape-b { transform: rotate(22deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vc-curtain, .vc-under, .vc-mark, .vc-word, .vc-line, .vc-tag, .vc-tape, .vc-track { animation: none; }
+  .vc-root { animation: vc-fade 500ms ease 400ms forwards; }
+  @keyframes vc-fade { to { opacity: 0; visibility: hidden; } }
+}
+
+/* Scrolling: no hover effects on page content until the scroll settles (see fx/runtime.tsx) */
+html[data-scrolling] main { pointer-events: none; }
+
+/* Scroll reveal for page sections (see fx/runtime.tsx): quick fade + rise when a section enters the viewport */
+[data-fx-rv] { transition: opacity 520ms var(--ease-out-soft), transform 520ms var(--ease-out-soft); }
+[data-fx-rv]:not([data-fx-in]) { opacity: 0; transform: translate3d(0, 40px, 0); }
+@media (prefers-reduced-motion: reduce) {
+  [data-fx-rv]:not([data-fx-in]) { opacity: 1; transform: none; }
+}
+
+/* ───────────────────────── WhatsApp button attention cue ─────────────────────────
+ * Radar rings ping out every 2.4s, the icon gives a short phone-ring shake every 4s and the red "1"
+ * dot pops in once. Transform/opacity only; off for reduced motion.
+ */
+.wa-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: #25d366;
+  z-index: -1;
+  animation: wa-ping 2.4s cubic-bezier(0.2, 0.7, 0.3, 1) infinite;
+}
+.wa-ring-2 { animation-delay: 1.2s; }
+@keyframes wa-ping {
+  0% { transform: scale(1); opacity: 0.55; }
+  80%, 100% { transform: scale(1.9); opacity: 0; }
+}
+.wa-shake { animation: wa-shake 4s ease-in-out 1.5s infinite; transform-origin: 50% 60%; }
+@keyframes wa-shake {
+  0%, 76%, 100% { transform: rotate(0); }
+  79% { transform: rotate(-16deg); }
+  82% { transform: rotate(14deg); }
+  85% { transform: rotate(-12deg); }
+  88% { transform: rotate(10deg); }
+  91% { transform: rotate(-6deg); }
+  94% { transform: rotate(0); }
+}
+.wa-dot { animation: wa-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 2s backwards; }
+@keyframes wa-pop {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wa-ring, .wa-shake, .wa-dot { animation: none; }
+  .wa-ring { display: none; }
+}
+
+/* ───────────────────────── Social rail ─────────────────────────
+ * Vertical "Follow us" label reads bottom-to-top; the rail slides in from its edge once the opening curtain
+ * has lifted (first paint only — it's a fixed element outside the page-enter animation).
+ */
+.social-rail-label { writing-mode: vertical-rl; transform: rotate(180deg); }
+:lang(ar) .social-rail-label { transform: none; font-size: 12px; }
+.social-rail { animation: social-rail-in 0.7s var(--ease-out-soft, cubic-bezier(0.22, 1, 0.36, 1)) 1.3s backwards; }
+@keyframes social-rail-in {
+  from { opacity: 0; translate: -100% 0; }
+}
+[dir="rtl"] .social-rail { animation-name: social-rail-in-rtl; }
+@keyframes social-rail-in-rtl {
+  from { opacity: 0; translate: 100% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .social-rail { animation: none; }
+}
+
+/* ───────────────────────── Tilt3D depth ─────────────────────────
+ * Cards are a 3D context only while hovered (Tilt3D sets [data-tilt]); at rest they stay flat — a permanent
+ * preserve-3d context makes Firefox draw a hairline seam across large images. Lifted layers use --z.
+ */
+[data-tilt] { transform-style: preserve-3d; }
+[data-tilt] :is(.tilt-z, [data-z]) { transform: translateZ(var(--z, 0px)); }
