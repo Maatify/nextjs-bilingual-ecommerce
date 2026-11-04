@@ -591,7 +591,7 @@ Maatify is a digital solutions company building web apps, e-commerce stores, iOS
 
 ### Built by
 
-**Ahmed Fawzy**, Co-Founder & Managing Partner, Maatify · Cairo, Egypt
+**Ahmed Fawzy**, Co-Founder & Front-end Team Leader, Maatify · Cairo, Egypt
 
 He leads client projects end to end, from scope and pricing to delivery, building fast, bilingual (Arabic/English) e-commerce stores, web apps and mobile apps for brands in Egypt, the Gulf and the UK.
 
