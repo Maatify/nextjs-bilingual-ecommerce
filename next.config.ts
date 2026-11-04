@@ -46,7 +46,7 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  outputFileTracingIncludes: { "/**": ["./deploy/verda.db"] }, // DB snapshot for Vercel (see store.ts restoreSnapshot)
+  outputFileTracingIncludes: { "/**": ["./deploy/vedra.db"] }, // DB snapshot for Vercel (see store.ts restoreSnapshot)
   poweredByHeader: false,
   // storefront root layout is app/[lang] and the admin has its own → 404s for unmatched URLs use app/global-not-found.tsx
   experimental: {

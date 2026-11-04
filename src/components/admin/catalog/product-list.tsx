@@ -640,7 +640,7 @@ function QuickEdit({ r, categories, allTags, onCancel, onSaved }: { r: ProductRo
       className="overflow-hidden bg-a-violet/[0.05]"
       onKeyDown={(e) => {
         if (e.key === "Escape") onCancel();
-        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "s") (e.preventDefault(), e.stopPropagation(), save());
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "s") { e.preventDefault(); e.stopPropagation(); save(); }
       }}
     >
       <div className="px-4 py-4">
@@ -689,7 +689,7 @@ function QuickEdit({ r, categories, allTags, onCancel, onSaved }: { r: ProductRo
                 placeholder={tags.length ? "" : tr("catalog.list.qe.addTags")}
                 onChange={(e) => (e.target.value.endsWith(",") ? addTag(e.target.value.slice(0, -1)) : setTagInput(e.target.value))}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") (e.preventDefault(), addTag(tagInput));
+                  if (e.key === "Enter") { e.preventDefault(); addTag(tagInput); }
                   if (e.key === "Backspace" && !tagInput && tags.length) setTags(tags.slice(0, -1));
                 }}
                 onBlur={() => tagInput && addTag(tagInput)}

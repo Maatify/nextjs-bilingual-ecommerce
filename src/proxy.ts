@@ -1,9 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { legacyKey } from "./lib/legacy-name";
 import { LANG_COOKIE, stripLocale } from "./lib/i18n/store/config";
 import { SESSION_COOKIE, SESSION_COOKIE_SECURE } from "./server/security/cookie-names";
 
 /** Same cookie the language switcher writes (one year, whole site). */
 const LANG_COOKIE_OPTS = { path: "/", maxAge: 31536000, sameSite: "lax" } as const;
+/** Saved language; a cookie set before the store was renamed still counts. */
+const savedLang = (req: NextRequest) => req.cookies.get(LANG_COOKIE)?.value ?? req.cookies.get(legacyKey(LANG_COOKIE))?.value;
 
 /*
  * Next 16 "proxy" (formerly middleware). Two independent jobs, split by path:
@@ -17,7 +20,7 @@ const LANG_COOKIE_OPTS = { path: "/", maxAge: 31536000, sameSite: "lax" } as con
  *
  * 2) Storefront language routing — every other page URL (never /api, /_next, /media or files).
  *    English keeps the unprefixed URLs and is served from app/[lang] via an internal rewrite to /en/…;
- *    Arabic lives at /ar/…. A shopper's first visit (no `verda_lang` cookie) whose Accept-Language prefers
+ *    Arabic lives at /ar/…. A shopper's first visit (no `vedra_lang` cookie) whose Accept-Language prefers
  *    Arabic is redirected to the /ar equivalent; after that the cookie (set by the language switcher) wins.
  *    Rewrites hit the prerendered pages, so the storefront stays fully static.
  */
@@ -90,7 +93,7 @@ function storefront(req: NextRequest) {
   }
 
   // English URL. A remembered Arabic choice — or, on a first visit, an Arabic-first browser — goes to /ar.
-  const saved = req.cookies.get(LANG_COOKIE)?.value;
+  const saved = savedLang(req);
   const isPrefetch = req.headers.has("next-router-prefetch") || req.headers.get("purpose") === "prefetch";
   // Crawlers / link-preview bots always get the URL they asked for: auto-redirecting them by Accept-Language
   // would hide the English pages from search engines (each language is reachable via its own URL + hreflang).

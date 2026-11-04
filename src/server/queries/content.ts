@@ -1,11 +1,9 @@
-import { getContent, getSettings, listCollections, listProducts, saveContent, saveSettings } from "@/server/store";
-import type { StoreContent, StoreSettings } from "@/lib/types";
+import { getContent, listCollections, listProducts } from "@/server/store";
 import type { LinkTarget, ProductOption } from "@/components/admin/content/types";
 
 export type { LinkTarget, ProductOption };
 
-/* Read helpers + safe partial writers for the Online store / Settings editors. */
-
+/* Read helpers for the Online store / Settings editors. */
 
 /** Every internal destination a link picker can offer. */
 export function linkTargets(): LinkTarget[] {
@@ -31,15 +29,3 @@ export function productOptions(): ProductOption[] {
     .map((p) => ({ id: p.id, title: p.title, image: p.colors[0]?.images[0] ?? "", price: p.price, status: p.status ?? "active" }));
 }
 
-/** Merge a slice into the stored content, so editors on different pages never clobber each other. */
-export function patchContent<K extends keyof StoreContent>(key: K, value: StoreContent[K]) {
-  const next = { ...getContent(), [key]: value };
-  saveContent(next);
-  return next;
-}
-
-export function patchSettings<K extends keyof StoreSettings>(key: K, value: StoreSettings[K]) {
-  const next = { ...getSettings(), [key]: value };
-  saveSettings(next);
-  return next;
-}

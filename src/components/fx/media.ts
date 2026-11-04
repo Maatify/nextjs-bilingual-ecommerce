@@ -14,15 +14,10 @@ function mq(query: string) {
 }
 
 const FX = mq("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)");
-const REDUCE = mq("(prefers-reduced-motion: reduce)");
 
 /** True only for a mouse/trackpad user who hasn't asked for reduced motion (false on the server and on touch). */
 export function useFx() {
   return useSyncExternalStore(FX.subscribe, FX.get, () => false);
-}
-
-export function usePrefersReducedMotion() {
-  return useSyncExternalStore(REDUCE.subscribe, REDUCE.get, () => false);
 }
 
 function readRtl() {

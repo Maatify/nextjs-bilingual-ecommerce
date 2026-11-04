@@ -454,7 +454,7 @@ export const ar: Widen<typeof en> = {
     noneBody: "اشتريت {title}؟ قول للناس المقاس جه عليك إزاي والخامة عاملة إيه.",
     verified: "اشترى فعلًا",
     photoFrom: "صورة من {name}",
-    reply: "رد VERDA",
+    reply: "رد VEDRA",
     cm: "{n} سم",
     kg: "{n} كجم",
     bought: "اشترى مقاس {size}",

@@ -50,7 +50,7 @@ const products = [
   product("V", 500, { sizes: [{ label: "M", stock: 5 }, { label: "L", stock: 5 }], variants: [{ color: "Black", size: "L", stock: 5, price: 700 }] } as Partial<Product>),
 ];
 
-(globalThis as { __verdaStore?: { snapshot: () => StoreSnapshot } }).__verdaStore = {
+(globalThis as { __vedraStore?: { snapshot: () => StoreSnapshot } }).__vedraStore = {
   snapshot: () => ({ products, collections: [], reviews: [], settings: { offer, promoCodes: PROMOS }, content: {} }) as unknown as StoreSnapshot,
 };
 

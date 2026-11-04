@@ -21,6 +21,3 @@ export function defaultVariant(p: Product): { color: string; size: string } {
   for (const s of sizes) for (const c of p.colors) if (variantStock(p, c.name, s.label) > 0) return { color: c.name, size: s.label };
   return { color: p.colors[0].name, size: p.sizes[0].label };
 }
-
-/** Default quick-add size (see defaultVariant). */
-export const defaultSize = (p: Product) => defaultVariant(p).size;

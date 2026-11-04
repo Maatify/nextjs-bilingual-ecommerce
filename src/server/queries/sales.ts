@@ -53,8 +53,8 @@ function listPlaced(query: OrderQuery): { rows: Order[]; total: number } {
   if (query.status && query.status !== "all") return listOrders(query);
   const where = ["status != 'draft'"];
   const args: (string | number)[] = [];
-  if (query.from) (where.push("created_at >= ?"), args.push(query.from));
-  if (query.to) (where.push("created_at < ?"), args.push(query.to));
+  if (query.from) { where.push("created_at >= ?"); args.push(query.from); }
+  if (query.to) { where.push("created_at < ?"); args.push(query.to); }
   if (query.q) {
     where.push("(number LIKE ? OR phone LIKE ? OR data LIKE ?)");
     const like = `%${query.q}%`;

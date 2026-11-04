@@ -5,8 +5,6 @@ import type { Tone } from "../ui";
 /* Order status / payment metadata shared by server pages and client views (no "use client"). */
 
 export const FLOW: OrderStatus[] = ["pending", "confirmed", "packed", "shipped", "delivered"];
-export const ALL_STATUSES: OrderStatus[] = [...FLOW, "cancelled", "returned"];
-
 export const STATUS_META: Record<OrderStatus, { label: string; tone: Tone; icon: AIconName }> = {
   draft: { label: "Draft", tone: "neutral", icon: "edit" },
   pending: { label: "Pending", tone: "amber", icon: "bell" },
@@ -45,9 +43,6 @@ export const METHOD_META: Record<Order["paymentMethod"], { label: string; icon: 
   wallet: { label: "Wallet", icon: "phone" },
   installments: { label: "Installments", icon: "calendar" },
 };
-
-export const SOURCE_LABEL: Record<Order["source"], string> = { web: "Web store", lp: "Ad landing page", manual: "Manual" };
-
 export const isFinal = (s: OrderStatus) => s === "cancelled" || s === "returned";
 
 /** Forward moves along FLOW only (never out of cancelled/returned). */

@@ -29,11 +29,11 @@ export function parseCsv(text: string): string[][] {
     const ch = src[i];
     if (quoted) {
       if (ch === '"') {
-        if (src[i + 1] === '"') (cell += '"'), i++;
+        if (src[i + 1] === '"') { cell += '"'; i++; }
         else quoted = false;
       } else cell += ch;
     } else if (ch === '"' && cell === "") quoted = true;
-    else if (ch === sep) (row.push(cell), (cell = ""));
+    else if (ch === sep) { row.push(cell); cell = ""; }
     else if (ch === "\n" || ch === "\r") {
       if (ch === "\r" && src[i + 1] === "\n") i++;
       row.push(cell);
@@ -42,7 +42,7 @@ export function parseCsv(text: string): string[][] {
       cell = "";
     } else cell += ch;
   }
-  if (cell !== "" || row.length) (row.push(cell), rows.push(row));
+  if (cell !== "" || row.length) { row.push(cell); rows.push(row); }
   return rows.filter((r) => r.some((c) => c.trim() !== ""));
 }
 

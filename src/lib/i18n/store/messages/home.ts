@@ -77,6 +77,6 @@ export const ar: Widen<typeof en> = {
     rowB: "تقييمات تانية",
     verified: "اشترى فعلًا",
   },
-  trust: { label: "ليه تطلب من VERDA", cod: "الدفع عند الاستلام", exchange: "استبدال مجاني خلال 14 يوم", delivery: "التوصيل من يوم لـ 3 أيام" },
+  trust: { label: "ليه تطلب من VEDRA", cod: "الدفع عند الاستلام", exchange: "استبدال مجاني خلال 14 يوم", delivery: "التوصيل من يوم لـ 3 أيام" },
   faq: { heading: "أسئلة بتتسأل كتير", all: "كل الأسئلة" },
 };

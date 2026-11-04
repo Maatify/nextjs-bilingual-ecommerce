@@ -87,7 +87,7 @@ const overview = {
     title: "Setup guide",
     ready: "Your store is ready to sell 🎉",
     readyHint: "Every step is done. You can hide this card.",
-    progress: { one: "Finish these steps to get the most out of VERDA — {count} to go.", other: "Finish these steps to get the most out of VERDA — {count} to go." },
+    progress: { one: "Finish these steps to get the most out of VEDRA — {count} to go.", other: "Finish these steps to get the most out of VEDRA — {count} to go." },
     expand: "Expand setup guide",
     collapse: "Collapse setup guide",
     dismiss: "Dismiss setup guide",

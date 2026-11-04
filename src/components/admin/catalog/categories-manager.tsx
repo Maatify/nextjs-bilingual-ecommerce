@@ -48,7 +48,7 @@ const descendants = (cats: Collection[], handle: string) => {
   let grew = true;
   while (grew) {
     grew = false;
-    for (const c of cats) if (c.parent && out.has(c.parent) && !out.has(c.handle)) (out.add(c.handle), (grew = true));
+    for (const c of cats) if (c.parent && out.has(c.parent) && !out.has(c.handle)) { out.add(c.handle); grew = true; }
   }
   return out;
 };
@@ -292,7 +292,7 @@ function QuickEdit({ c, handles, onDone }: { c: Collection; handles: string[]; o
       <div
         className="grid gap-3 sm:grid-cols-2"
         onKeyDown={(e) => {
-          if (e.key === "Enter") (e.preventDefault(), save());
+          if (e.key === "Enter") { e.preventDefault(); save(); }
           if (e.key === "Escape") onDone(false);
         }}
       >
@@ -540,7 +540,7 @@ function EditDrawer({ editing, categories, products, tags, onClose, onSaved, onD
       <div
         className="grid gap-5"
         onKeyDown={(e) => {
-          if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "s") (e.preventDefault(), save());
+          if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "s") { e.preventDefault(); save(); }
         }}
       >
         <div className="flex flex-wrap items-center justify-between gap-2">

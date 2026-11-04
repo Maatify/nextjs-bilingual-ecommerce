@@ -14,8 +14,8 @@ for (const lang of ["en", "ar"]) {
     test(`${lang} ${path} — no horizontal scroll`, async ({ page }) => {
       await page.addInitScript((cart) => {
         try {
-          localStorage.setItem("verda:welcome", String(Date.now()));
-          localStorage.setItem("verda:v1", cart);
+          localStorage.setItem("vedra:welcome", String(Date.now()));
+          localStorage.setItem("vedra:v1", cart);
         } catch {}
       }, CART);
       await page.route("**/api/recent-purchases**", (r) => r.fulfill({ status: 200, contentType: "application/json", body: "[]" }));

@@ -12,17 +12,7 @@ import type { Tone } from "../ui";
 
 export const LOW_STOCK = 3;
 
-export const statusTone: Record<ProductStatus, Tone> = { active: "green", draft: "amber", archived: "neutral" };
-/** English labels (legacy) — UI should prefer useStatusLabel() / t(`catalog.status.${s}`). */
-export const statusLabel: Record<ProductStatus, string> = { active: "Active", draft: "Draft", archived: "Archived" };
-/** Localised product status labels. */
-export function useStatusLabel(): Record<ProductStatus, string> {
-  const { t } = useT();
-  return { active: t("catalog.status.active"), draft: t("catalog.status.draft"), archived: t("catalog.status.archived") };
-}
-
-export const totalStock = (p: Product) => p.sizes.reduce((n, s) => n + (Number(s.stock) || 0), 0);
-export const lowSizes = (p: Product) => p.sizes.filter((s) => s.stock <= LOW_STOCK);
+export const statusTone: Record<ProductStatus, Tone> = { active: "green", draft: "amber", archived: "neutral" };export const lowSizes = (p: Product) => p.sizes.filter((s) => s.stock <= LOW_STOCK);
 
 export function slugify(s: string) {
   return s

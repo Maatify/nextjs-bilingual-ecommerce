@@ -85,6 +85,6 @@ const shell: Widen<typeof en> = {
     help: "عرض اختصارات لوحة المفاتيح",
     esc: "إغلاق النوافذ واللوحات",
   },
-  metaTitle: "لوحة تحكم VERDA",
+  metaTitle: "لوحة تحكم VEDRA",
 };
 export default shell;

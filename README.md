@@ -2,7 +2,9 @@
 
 [![CI](https://github.com/Maatify/nextjs-bilingual-ecommerce/actions/workflows/ci.yml/badge.svg)](https://github.com/Maatify/nextjs-bilingual-ecommerce/actions/workflows/ci.yml)
 
-**A complete English / Arabic (RTL) e-commerce storefront and admin dashboard built with Next.js 16. Multi-language by design and usable by any store in any country that sells in English and Arabic: cash on delivery, configurable shipping zones, offers, moderated reviews and a full bilingual back office.**
+**A complete English / Arabic (RTL) e-commerce storefront and admin dashboard built with Next.js 16. Bilingual by design and adaptable to other markets (see [Adapting it to your market](#adapting-it-to-your-market)): cash on delivery, configurable shipping zones, offers, moderated reviews and a full bilingual back office.**
+
+**Live demo:** [vedra.showcase.maatify.dev](https://vedra.showcase.maatify.dev/) (English) · [Arabic](https://vedra.showcase.maatify.dev/ar) (العربية). The demo resets on every deploy; orders placed there are not fulfilled.
 
 **Google PageSpeed Insights, home page of the live demo (lab data): Performance 98 · Accessibility 100 · Best Practices 100 · SEO 100, on both mobile and desktop.** [Details and per-page results](#audit-results).
 
@@ -29,7 +31,7 @@ This README covers what the store does, the decisions behind it (SEO, conversion
   - [Accessibility](#accessibility)
   - [Security](#security)
   - [Quality automation](#quality-automation)
-- [Skills used to build it](#skills-used-to-build-it)
+- [Engineering guidelines](#engineering-guidelines)
 - [Audit results](#audit-results)
 - [Known limitations](#known-limitations)
 - [Tech stack](#tech-stack)
@@ -80,7 +82,7 @@ Key pages in both languages: English on the left, Arabic (right-to-left) on the 
 | Area | What it does |
 |---|---|
 | Home | Hero collage of real bestsellers (ranked by sales), offer tapes, trust strip, category tiles, "The Edit" (bestsellers by 24 h sales, then the rest of the catalog), a colour story (one hoodie, every colour, deep-linked to the product), a one-tap matching set (top + sweatpants in the closest colour), reviews and a FAQ block. All sections are editable from the admin. |
-| Collections | 12 collections. Filters for category, size, colour and price band, six sort orders (featured, bestselling, newest, price up/down, top rated). Filter state lives in the URL. Offer banner explains Buy 2 Get 1 in one line. |
+| Collections | 9 public collections (plus 3 hidden ones used for navigation rules). Filters for category, size, colour and price band, six sort orders (featured, bestselling, newest, price up/down, top rated). Filter state lives in the URL. Offer banner explains Buy 2 Get 1 in one line. |
 | Search | Overlay and full `/search` page. Matches English **and** Arabic fields whatever the page language, handles plurals, Arabic dialect and English synonyms, Arabic letter normalisation (tashkeel, alef/yeh forms) and typos up to 2 edits ("hodie", "sweetpants"). Shows popular terms and recently viewed products. |
 | Wishlist | Heart on every card and product page, saved locally, "move to bag" with a size picker. |
 | Recently viewed | Kept locally, shown in search. |
@@ -202,7 +204,7 @@ Every admin write goes through a server action that logs the change and revalida
 - **Canonical URLs** and **hreflang** (`en`, `ar`, `x-default`) on every indexable page.
 - **`noindex`** on cart, checkout, thank-you, search, wishlist, track order, ad landing pages and review links.
 - **`robots.txt`** ([`src/app/robots.ts`](src/app/robots.ts)) keeps private and per-visitor paths out of the crawl in both languages, and blocks collection filter URLs (`/collections/*?`), which are client-side views of the same page. Product `?color=` links stay crawlable because they are the variant offer URLs in the JSON-LD.
-- **`sitemap.xml`** ([`src/app/sitemap.ts`](src/app/sitemap.ts)) is data-driven: 60 URLs, real `lastModified` from product edits (no fake dates), hreflang alternates and image entries. Refreshed hourly and on every admin write.
+- **`sitemap.xml`** ([`src/app/sitemap.ts`](src/app/sitemap.ts)) is data-driven: one URL per language for every product, visible collection and content page (60 URLs with the demo catalog), real `lastModified` from product edits (no fake dates), hreflang alternates and image entries. Refreshed hourly and on every admin write.
 - Real **404 status** for unknown products and pages.
 - One source for the site URL (`NEXT_PUBLIC_SITE_URL`); no hardcoded domains.
 - Open Graph and Twitter cards with generated per-product share images.
@@ -278,7 +280,7 @@ What was done:
 
 - Static prerendering for every storefront page in both languages; language routing via rewrites so pages stay static.
 - `next/image` everywhere with a custom loader, `sizes` per layout and a trimmed `deviceSizes` list. The LCP image on product and collection pages is preloaded with `fetchPriority="high"` and is in the initial HTML; everything below the fold is lazy.
-- Catalog photos are WebP (594 files, 8.77 MB in total) compressed by [`scripts/optimize-images.mjs`](scripts/optimize-images.mjs) with an **SSIMULACRA2 ≥ 90 quality gate**: quality is raised until the result is visually lossless, and the original is kept if the result isn't smaller.
+- Catalog photos are WebP (594 files, 8.8 MB in total) compressed by [`scripts/optimize-images.mjs`](scripts/optimize-images.mjs) with an **SSIMULACRA2 ≥ 90 quality gate**: quality is raised until the result is visually lossless, and the original is kept if the result isn't smaller.
 - Catalog photos are cached 30 days with `stale-while-revalidate`.
 - Fonts via `next/font` with `display: swap`; the Arabic font only loads on Arabic pages.
 - No third-party scripts at all.
@@ -340,9 +342,9 @@ The Lighthouse CI performance gate is set below the 0.9 target on purpose: `@lhc
 
 ---
 
-## Skills used to build it
+## Engineering guidelines
 
-Every change followed eight written guidelines: premium UI, responsive layout, UI animation, micro-interactions, accessibility, image optimization, performance, and a pre-ship website review. They are collected in one file: **[SKILLS.md](SKILLS.md)**.
+The rules every change in this repository follows (design tokens, motion, accessibility, images, performance and the pre-merge checklist) are in [docs/ENGINEERING_GUIDELINES.md](docs/ENGINEERING_GUIDELINES.md).
 
 ---
 
@@ -350,7 +352,7 @@ Every change followed eight written guidelines: premium UI, responsive layout, U
 
 ### Google PageSpeed Insights (live demo, home page)
 
-Run by the owner on 3 November 2026 against the home page of the live demo deployment. These are PageSpeed Insights **lab** results (Lighthouse); there is no field (real-user) data for the demo yet.
+Run by the owner on 2026-11-03 against the home page of the live demo deployment. These are PageSpeed Insights **lab** results (Lighthouse); there is no field (real-user) data for the demo yet.
 
 | | Performance | Accessibility | Best Practices | SEO | Agentic Browsing |
 |---|---|---|---|---|---|
@@ -395,7 +397,7 @@ Not covered: real devices, Samsung Internet, Opera, and Instagram / TikTok in-ap
 | Check | Result |
 |---|---|
 | `npm audit --omit=dev` | 0 vulnerabilities |
-| osv-scanner | 0 in production dependencies (18 dev-only, in ESLint / Lighthouse CI tooling, not shipped) |
+| osv-scanner | 0 in production dependencies; dev-only advisories (18 per osv-scanner, 36 per `npm audit`) in ESLint / Lighthouse CI tooling, not shipped |
 | semgrep (nextjs, owasp-top-ten, secrets, typescript) | 1 finding, accepted: sanitized `dangerouslySetInnerHTML` for the product description |
 | gitleaks | No secrets in source, scripts, tests or `public/` |
 | Client bundle grep | No keys, tokens, DB paths or emails |
@@ -406,7 +408,7 @@ Not covered: real devices, Samsung Internet, Opera, and Instagram / TikTok in-ap
 
 ### Code health
 
-`lint` 0 errors (27 style warnings in admin/server code), `typecheck` 0 errors on a fresh checkout (route types are generated by `next typegen` first), 20/20 unit tests, production build clean (88 pages generated), no `console.log` in `src/`.
+`lint` 0 errors, 0 warnings, `typecheck` 0 errors on a fresh checkout (route types are generated by `next typegen` first), 20/20 unit tests, production build clean (88 pages generated), no `console.log` in `src/`.
 
 ---
 
@@ -439,7 +441,7 @@ Possible extensions, not part of this repository: a payment gateway, ad-platform
 | Testing | Node test runner, Playwright, axe-core, Lighthouse CI |
 | Tooling | ESLint 9, TypeScript 5, husky, lint-staged, svgo, SSIMULACRA2 (`calc-s2-rust`) |
 
-Runtime dependencies: `next`, `react`, `react-dom`, `motion` and `sharp`. That's all.
+Runtime dependencies: `next`, `react`, `react-dom`, `motion` and `sharp`.
 
 ---
 
@@ -469,7 +471,7 @@ There is also a recovery flag, `ADMIN_PASSWORD_RESET`, read by the server: set i
 ### Data
 
 - The store database is a SQLite file in `data/` (git-ignored, together with uploads and backups).
-- On first boot it is created and **seeded automatically** with the catalog (12 products, 12 collections), settings, shipping rates and content pages. A fresh seed has **no orders and no reviews**.
+- On first boot it is created and **seeded automatically** with a starter catalog (6 products, 12 collections, 3 of them hidden), settings, shipping rates and content pages. A fresh seed has **no orders and no reviews**. The full demo catalog (12 products) and the sample reviews are in the `deploy/` snapshot.
 - [`deploy/`](deploy/) holds a sanitized snapshot made by `npm run db:snapshot`: catalog, content, settings and the 131 sample reviews, with orders, customers, messages, sessions and passwords removed, payments set to cash on delivery only and no review marked verified. On Vercel, the server copies it into the (ephemeral) database path on first start. To see the sample reviews locally, copy it into `data/` before the first run.
 - Admin → Backup exports and restores the whole store as JSON.
 
@@ -567,7 +569,7 @@ tests/                           # unit tests + Playwright specs
 scripts/                         # smoke, site check, security tests, image optimizer, DB snapshot
 deploy/                          # sanitized demo database snapshot
 docs/screenshots/                # README images (EN + AR, desktop + phone, PageSpeed Insights)
-SKILLS.md                        # the 8 build guidelines, in one file
+docs/ENGINEERING_GUIDELINES.md  # build rules and pre-merge checklist
 AUDIT_REPORT.md                  # the code audit
 LICENSE
 ```
@@ -589,9 +591,9 @@ Maatify is a digital solutions company building web apps, e-commerce stores, iOS
 
 ### Built by
 
-**Ahmed Fawzy**, Co-founder & Front-end Team Leader at Maatify · Cairo, Egypt
+**Ahmed Fawzy**, Co-Founder & Managing Partner, Maatify · Cairo, Egypt
 
-Ahmed Fawzy is co-founder and Front-end Team Leader at Maatify. He leads client projects end to end, from scope and pricing to delivery, building fast, bilingual (Arabic/English) e-commerce stores, web apps and mobile apps for brands in Egypt, the Gulf and the UK.
+He leads client projects end to end, from scope and pricing to delivery, building fast, bilingual (Arabic/English) e-commerce stores, web apps and mobile apps for brands in Egypt, the Gulf and the UK.
 
 [LinkedIn](https://www.linkedin.com/in/ahmed-fawzy-maatify) · [Website](https://maatify.dev) · [a.fawzy@maatify.com](mailto:a.fawzy@maatify.com)
 

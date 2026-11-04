@@ -9,7 +9,7 @@ import { getDict } from "@/lib/i18n/store/dict";
  * Localized "not found" <title> for every storefront 404 (unknown URL, product, collection or page).
  * Next 16 sends notFound() responses as a 404 whose server HTML is only the error shell (the UI below renders after
  * hydration — reproduced in a bare Next 16.4.3 app, so it's framework behaviour), but the head is still rendered on
- * the server: this keeps the server-side title right ("Page not found | VERDA" / Arabic) instead of the home title.
+ * the server: this keeps the server-side title right ("Page not found | VEDRA" / Arabic) instead of the home title.
  */
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();

@@ -44,7 +44,7 @@ next-env.d.ts
 # local store database & uploads
 /data/
 
-# audit tooling output (originals kept for owner review)
+# image optimizer / smoke test output
 /_unused_assets/
 /_image_backup/
 /smoke-failure.png
@@ -59,7 +59,6 @@ next-env.d.ts
 # image optimizer report (scripts/optimize-images.mjs)
 /_image_report.csv
 
-# local assistant notes (kept out of the repo)
-CLAUDE.md
-AGENTS.md
-.claude/
+# local editor files
+next-start.log
+/shots/

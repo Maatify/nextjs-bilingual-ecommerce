@@ -82,6 +82,6 @@ const shell = {
     help: "Show keyboard shortcuts",
     esc: "Close dialogs and panels",
   },
-  metaTitle: "VERDA Admin",
+  metaTitle: "VEDRA Admin",
 };
 export default shell;

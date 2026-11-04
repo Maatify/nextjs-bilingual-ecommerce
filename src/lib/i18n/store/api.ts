@@ -1,11 +1,11 @@
 /*
  * Language for storefront API route handlers (they can't read the [lang] root param).
- * Clients send `x-verda-lang`; otherwise the same-origin Referer (/ar/…) decides; default English.
+ * Clients send `x-vedra-lang`; otherwise the same-origin Referer (/ar/…) decides; default English.
  * Responses stay byte-for-byte English unless the shopper is on the Arabic storefront.
  */
 import { asLocale, stripLocale, type Locale } from "./config";
 
-export const LANG_HEADER = "x-verda-lang";
+export const LANG_HEADER = "x-vedra-lang";
 
 export function requestLocale(req: Request): Locale {
   const h = req.headers.get(LANG_HEADER);

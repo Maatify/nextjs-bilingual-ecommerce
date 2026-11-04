@@ -10,6 +10,4 @@ shots
 test-results
 playwright-report
 .lighthouseci
-.test-data
-.e2e-data
 *.tsbuildinfo

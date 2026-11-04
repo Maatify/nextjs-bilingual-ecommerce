@@ -13,7 +13,7 @@ import type { StoreSnapshot } from "./types";
  */
 
 type Reader = { snapshot: () => StoreSnapshot };
-const g = globalThis as typeof globalThis & { __verdaStore?: Reader };
+const g = globalThis as typeof globalThis & { __vedraStore?: Reader };
 
 let clientSnapshot: StoreSnapshot | null = null;
 
@@ -23,10 +23,10 @@ export function hydrateSnapshot(s: StoreSnapshot) {
 
 export function snapshot(): StoreSnapshot {
   if (typeof window === "undefined") {
-    if (!g.__verdaStore) throw new Error("[verda] store not booted — import \"@/server/boot\" in this server entry");
-    return g.__verdaStore.snapshot();
+    if (!g.__vedraStore) throw new Error("[vedra] store not booted — import \"@/server/boot\" in this server entry");
+    return g.__vedraStore.snapshot();
   }
-  if (!clientSnapshot) throw new Error("[verda] snapshot not hydrated — render inside <StoreDataProvider>");
+  if (!clientSnapshot) throw new Error("[vedra] snapshot not hydrated — render inside <StoreDataProvider>");
   return clientSnapshot;
 }
 

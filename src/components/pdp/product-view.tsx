@@ -21,7 +21,7 @@ import { ProductDetails } from "./product-details";
 import { SizeSelector } from "./size-selector";
 import { StickyAtc } from "./sticky-atc";
 
-export const PDP_ADD_EVENT = "verda:pdp-add";
+export const PDP_ADD_EVENT = "vedra:pdp-add";
 
 export interface Preselect {
   color?: string | null;

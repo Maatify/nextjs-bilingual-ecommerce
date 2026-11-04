@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/products/[
   const description = p.seoDescription || ([...(generated + M.tail)].length <= 155 ? generated + M.tail : generated);
   const url = localeHref(locale, `/products/${p.handle}`);
   return {
-    // merchant SEO titles that already carry the brand skip the "| VERDA" template
+    // merchant SEO titles that already carry the brand skip the "| VEDRA" template
     title: title.includes(getSite().name) ? { absolute: title } : title,
     description,
     alternates: alternatesFor(`/products/${p.handle}`, locale),

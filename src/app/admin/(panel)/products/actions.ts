@@ -187,16 +187,6 @@ export async function saveProduct(input: Product, opts: { create?: boolean; manu
     return fail(e);
   }
 }
-
-export async function newProductId(): Promise<ActionResult<string>> {
-  await guard();
-  try {
-    return { ok: true, data: dbNewId() };
-  } catch (e) {
-    return fail(e);
-  }
-}
-
 export async function deleteProduct(id: string): Promise<ActionResult> {
   await guard();
   try {

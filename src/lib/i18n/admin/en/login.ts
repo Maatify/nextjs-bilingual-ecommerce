@@ -1,7 +1,7 @@
 const login = {
   metaTitle: "Sign in",
   welcome: "Welcome back",
-  subtitle: "Sign in to manage the VERDA store.",
+  subtitle: "Sign in to manage the VEDRA store.",
   code: "Authentication code",
   codeHelp: "Enter the 6-digit code from your authenticator app, or one of your recovery codes.",
   password: "Admin password",

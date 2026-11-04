@@ -66,6 +66,7 @@ export function OrdersList({ filters, rows, total, tabCounts, pages }: { filters
       if (q.trim() !== filters.q) navigate({ q: q.trim() });
     }, 320);
     return () => clearTimeout(timer);
+    // debounce reacts to typing only; filters/navigate change on every URL update and would re-fire the search
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [q]);
 

@@ -7,6 +7,7 @@ import { AdminThemeRoot, Toaster, type AdminTheme } from "@/components/admin/ui"
 import { dirOf } from "@/lib/i18n/admin";
 import { getAdminLocale, getT } from "@/lib/i18n/admin/server";
 import { ensureArabicSeed } from "@/server/queries/ar-seed";
+import { legacyKey } from "@/lib/legacy-name";
 import "../globals.css";
 import "./admin-i18n.css";
 import { cairo, latinFontVars } from "../fonts";
@@ -23,11 +24,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // keep in sync with ADMIN_THEME_COOKIE in components/admin/ui.tsx (constants can't cross the client boundary)
-const COOKIE = "verda_admin_theme";
+const COOKIE = "vedra_admin_theme";
 const THEMES: AdminTheme[] = ["dark", "light", "system"];
 
 async function readTheme(): Promise<AdminTheme> {
-  const v = (await cookies()).get(COOKIE)?.value as AdminTheme | undefined;
+  const jar = await cookies();
+  const v = (jar.get(COOKIE)?.value ?? jar.get(legacyKey(COOKIE))?.value) as AdminTheme | undefined;
   return v && THEMES.includes(v) ? v : "dark";
 }
 

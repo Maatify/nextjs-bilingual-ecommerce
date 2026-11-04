@@ -79,9 +79,9 @@ export function LinkInput({ value, onChange, targets, placeholder = "/collection
                   setActive(0);
                 }}
                 onKeyDown={(e) => {
-                  if (e.key === "ArrowDown") (e.preventDefault(), setActive((a) => Math.min(a + 1, list.length - 1)));
-                  else if (e.key === "ArrowUp") (e.preventDefault(), setActive((a) => Math.max(a - 1, 0)));
-                  else if (e.key === "Enter" && list[active]) (e.preventDefault(), pick(list[active]));
+                  if (e.key === "ArrowDown") { e.preventDefault(); setActive((a) => Math.min(a + 1, list.length - 1)); }
+                  else if (e.key === "ArrowUp") { e.preventDefault(); setActive((a) => Math.max(a - 1, 0)); }
+                  else if (e.key === "Enter" && list[active]) { e.preventDefault(); pick(list[active]); }
                   else if (e.key === "Escape") setOpen(false);
                 }}
                 placeholder={t("content.link.search")}

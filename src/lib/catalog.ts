@@ -7,7 +7,6 @@ import type { Collection, Product } from "./types";
  * ("active") only. Call inside render/functions — never at module scope.
  */
 
-export { IMG } from "./seed/catalog";
 export { colorStock, findVariant, isTracked, priceRange, variantPrice, variantStock, withColorStock, UNTRACKED_STOCK } from "./variants";
 
 export const getProducts = (): Product[] => snapshot().products;
@@ -50,9 +49,6 @@ export function getCategoryCollections() {
     return items.length > 0 && new Set(items.map((p) => p.category)).size === 1;
   });
 }
-
-export const totalStock = (p: Product) => p.sizes.reduce((n, s) => n + s.stock, 0);
-
 /** Related products: same category first, then same gender, excluding self. */
 export function related(p: Product, limit = 8) {
   const score = (q: Product) =>

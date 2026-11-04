@@ -22,7 +22,7 @@ const POLL_MS = 10_000;
  * hold unsaved drafts that a server refresh would reset, so there we only show the toast.
  */
 const REFRESHABLE = /^\/admin(\/(orders|reviews|messages|customers|analytics|activity))?\/?$/;
-const MUTE_KEY = "verda:admin:mute";
+const MUTE_KEY = "vedra:admin:mute";
 
 /* ── mute preference (localStorage, shared across tabs) ── */
 const muteSubs = new Set<() => void>();

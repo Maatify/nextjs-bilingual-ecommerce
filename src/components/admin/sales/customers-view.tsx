@@ -102,8 +102,8 @@ export function CustomersView({ customers, subscribers, now }: { customers: Cust
   const repeatRate = customers.length ? (counts.repeat / customers.length) * 100 : 0;
 
   const exportCurrent = () => {
-    if (seg === "subscribers") return downloadCsv("verda-subscribers.csv", [["Contact", "Source", "Subscribed"], ...subs.map((s) => [s.contact, s.source, s.createdAt])]);
-    downloadCsv(`verda-customers-${seg}.csv`, [["Name", "Phone", "Email", "Governorate", "City", "Orders", "Total spent", "AOV", "First order", "Last order"], ...rows.map(({ c }) => [c.name, c.phone, c.email ?? "", c.governorate, c.city, c.orders, c.spent, c.aov, c.firstAt, c.lastAt])]);
+    if (seg === "subscribers") return downloadCsv("vedra-subscribers.csv", [["Contact", "Source", "Subscribed"], ...subs.map((s) => [s.contact, s.source, s.createdAt])]);
+    downloadCsv(`vedra-customers-${seg}.csv`, [["Name", "Phone", "Email", "Governorate", "City", "Orders", "Total spent", "AOV", "First order", "Last order"], ...rows.map(({ c }) => [c.name, c.phone, c.email ?? "", c.governorate, c.city, c.orders, c.spent, c.aov, c.firstAt, c.lastAt])]);
   };
 
   return (

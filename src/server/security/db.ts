@@ -12,12 +12,12 @@ import { getDb } from "@/server/store";
  *   sec_idempotency   order Idempotency-Key → order number (10 min)
  */
 
-type G = typeof globalThis & { __verdaSecReady?: boolean };
+type G = typeof globalThis & { __vedraSecReady?: boolean };
 const g = globalThis as G;
 
 export function sdb() {
   const db = getDb();
-  if (!g.__verdaSecReady) {
+  if (!g.__vedraSecReady) {
     db.exec(`
       CREATE TABLE IF NOT EXISTS sec_kv (key TEXT PRIMARY KEY, value TEXT NOT NULL);
       CREATE TABLE IF NOT EXISTS sec_sessions (id_hash TEXT PRIMARY KEY, created_at INTEGER NOT NULL, last_seen INTEGER NOT NULL, expires_at INTEGER NOT NULL, ip TEXT, ua TEXT);
@@ -26,7 +26,7 @@ export function sdb() {
       CREATE TABLE IF NOT EXISTS sec_rate (key TEXT PRIMARY KEY, count INTEGER NOT NULL, reset_at INTEGER NOT NULL);
       CREATE TABLE IF NOT EXISTS sec_idempotency (key TEXT PRIMARY KEY, order_number TEXT NOT NULL, created_at INTEGER NOT NULL);
     `);
-    g.__verdaSecReady = true;
+    g.__vedraSecReady = true;
   }
   return db;
 }

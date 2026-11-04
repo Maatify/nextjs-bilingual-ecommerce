@@ -158,7 +158,7 @@ function Sidebar({ counts, onNavigate, onSettingsTab }: { counts: ShellCounts; o
       <div className="flex items-center gap-3 px-4 pb-4 pt-5">
         <span className="a-grad grid size-9 shrink-0 place-items-center rounded-[11px] font-poster text-[17px] text-white shadow-[0_8px_24px_-8px_rgb(139_116_255/0.8)] [transform:perspective(300px)_rotateY(-14deg)_rotateX(6deg)]">V</span>
         <span className="min-w-0 leading-tight">
-          <span className="block truncate text-[14px] font-semibold">VERDA</span>
+          <span className="block truncate text-[14px] font-semibold">VEDRA</span>
           <span className="block text-[12px] text-a-dim">{t("shell.storeAdmin")}</span>
         </span>
       </div>
@@ -378,8 +378,8 @@ function CommandPalette({ open, onClose, index }: { open: boolean; onClose: () =
                   setSel(0);
                 }}
                 onKeyDown={(e) => {
-                  if (e.key === "ArrowDown") (e.preventDefault(), setSel((s) => Math.min(results.length - 1, s + 1)));
-                  if (e.key === "ArrowUp") (e.preventDefault(), setSel((s) => Math.max(0, s - 1)));
+                  if (e.key === "ArrowDown") { e.preventDefault(); setSel((s) => Math.min(results.length - 1, s + 1)); }
+                  if (e.key === "ArrowUp") { e.preventDefault(); setSel((s) => Math.max(0, s - 1)); }
                   if (e.key === "Enter" && results[sel]) go(results[sel].href);
                 }}
                 placeholder={tr("shell.cmd.placeholder")}

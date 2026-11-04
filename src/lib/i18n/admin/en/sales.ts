@@ -431,7 +431,7 @@ const sales = {
     giftOver: "Free gift over",
     noGift: "0 = no gift",
     giftName: "Gift name",
-    giftPh: "e.g. VERDA tote bag",
+    giftPh: "e.g. VEDRA tote bag",
     prepaidLabel: "Discount when paying online",
     prepaidHint: "Card / wallet orders get {pct}% off — nudges customers away from COD.",
     noIncentive: "0 = no incentive",

@@ -4,7 +4,7 @@ import type { Widen } from "../core";
 const login: Widen<typeof en> = {
   metaTitle: "تسجيل الدخول",
   welcome: "مرحبًا بعودتك",
-  subtitle: "سجّل الدخول لإدارة متجر VERDA.",
+  subtitle: "سجّل الدخول لإدارة متجر VEDRA.",
   code: "رمز التحقق",
   codeHelp: "أدخل الرمز المكوّن من 6 أرقام من تطبيق المصادقة، أو أحد رموز الاسترداد.",
   password: "كلمة مرور المسؤول",

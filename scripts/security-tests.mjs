@@ -6,7 +6,7 @@
  *   BASE_URL=http://localhost:3456 node scripts/security-tests.mjs --safe    # nothing stored: skips tests that create rows
  *
  * Never point this at a host you don't own. Row-creating tests only run when BASE_URL is localhost (the script
- * needs direct access to data/verda.db to delete exactly what it created). Every rate-limit / throttle key the
+ * needs direct access to data/vedra.db to delete exactly what it created). Every rate-limit / throttle key the
  * script touches is isolated with a per-run X-Forwarded-For test IP (198.18.<run>.<n>, RFC 2544 benchmark range)
  * and removed at the end; the global sign-in counter is restored to its pre-run value.
  *
@@ -23,7 +23,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const BASE = (process.env.BASE_URL || "http://localhost:3456").replace(/\/$/, "");
 const SAFE = process.argv.includes("--safe");
 const LOCAL = /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/.test(BASE);
-const DB_PATH = path.join(ROOT, "data", "verda.db");
+const DB_PATH = process.env.VEDRA_DB ?? path.join(ROOT, "data", "vedra.db");
 const WRITES = LOCAL && !SAFE && fs.existsSync(DB_PATH);
 const RUN = Math.floor(Math.random() * 250) + 1;
 const NONCE = `st${Date.now().toString(36)}`;
@@ -239,7 +239,7 @@ async function headersTest() {
 async function bundleGrep() {
   const dir = path.join(ROOT, ".next", "static");
   if (!fs.existsSync(dir)) return skip("client bundle secret grep", "no .next/static (run next build)");
-  const pats = [/sk_(live|test)_[0-9a-zA-Z]{8,}/, /-----BEGIN [A-Z ]*PRIVATE KEY/, /AKIA[0-9A-Z]{16}/, /verda\.db|data\/verda/, /process\.env\.[A-Z_]*(SECRET|PASSWORD|KEY|TOKEN)/, /ADMIN_PASSWORD\s*[:=]\s*["'][^"']+/, /\b[A-Za-z0-9._%+-]+@(?!example\.)[A-Za-z0-9-]+\.(com|net|org|eg|io)\b/];
+  const pats = [/sk_(live|test)_[0-9a-zA-Z]{8,}/, /-----BEGIN [A-Z ]*PRIVATE KEY/, /AKIA[0-9A-Z]{16}/, /vedra\.db|data\/vedra/, /process\.env\.[A-Z_]*(SECRET|PASSWORD|KEY|TOKEN)/, /ADMIN_PASSWORD\s*[:=]\s*["'][^"']+/, /\b[A-Za-z0-9._%+-]+@(?!example\.)[A-Za-z0-9-]+\.(com|net|org|eg|io)\b/];
   // private / disabled promo codes must never ship to the client
   if (db) {
     try {
@@ -420,7 +420,7 @@ async function storedOrder() {
       wait: 1500,
       before: async (pg) => {
         await pg.goto(BASE + "/robots.txt");
-        await pg.evaluate((ord) => sessionStorage.setItem("verda:lastOrder", JSON.stringify(ord)), o);
+        await pg.evaluate((ord) => sessionStorage.setItem("vedra:lastOrder", JSON.stringify(ord)), o);
       },
     });
     const txt = await page.evaluate(() => document.body.innerText);
@@ -507,7 +507,7 @@ async function uploads() {
   const j = await req("/api/reviews/request", { method: "POST", json: { token: "x" } });
   check("review-link JSON body → 415", j.status === 415, `${j.status}`);
   // media route only serves rasters
-  for (const u of ["/media/x.svg", "/media/x.html", "/media/..%2f..%2fverda.db", "/media/reviews/..%2f..%2f.env.local", "/media/verda.db"]) {
+  for (const u of ["/media/x.svg", "/media/x.html", "/media/..%2f..%2fvedra.db", "/media/reviews/..%2f..%2f.env.local", "/media/vedra.db"]) {
     const m = await req(u);
     check(`media ${u} → 404`, m.status === 404, `${m.status}`);
   }
@@ -600,8 +600,8 @@ async function authz() {
   const routes = adminRoutes().map((r) => r.replace(/\[[^\]]+\]/g, snap.orderNumbers?.[0] ? `o_${snap.orderNumbers[0]}` : "x"));
   const variants = [
     ["logged out", {}],
-    ["bogus cookie", { cookie: "verda_admin=bogus; __Host-verda_admin=bogus" }],
-    ["forged-looking cookie", { cookie: `verda_admin=${"a".repeat(64)}` }],
+    ["bogus cookie", { cookie: "vedra_admin=bogus; __Host-vedra_admin=bogus" }],
+    ["forged-looking cookie", { cookie: `vedra_admin=${"a".repeat(64)}` }],
     ["x-middleware-subrequest", { "x-middleware-subrequest": "middleware:middleware:middleware:middleware:middleware" }],
     ["x-middleware-subrequest proxy", { "x-middleware-subrequest": "src/proxy:src/proxy:src/proxy:src/proxy:src/proxy" }],
     ["x-middleware-subrequest src/middleware", { "x-middleware-subrequest": "src/middleware:src/middleware:src/middleware:src/middleware:src/middleware" }],
@@ -634,7 +634,7 @@ async function authz() {
       skip(`server action ${name} w/o session`, "id not found in server-reference-manifest");
       continue;
     }
-    for (const cookie of ["verda_admin=bogus", ""]) {
+    for (const cookie of ["vedra_admin=bogus", ""]) {
       const r = await req(route, { method: "POST", headers: { "next-action": hit[0], "content-type": "text/plain;charset=UTF-8", origin: BASE, accept: "text/x-component", ...(cookie ? { cookie } : {}) }, body: "[]" });
       check(`server action ${name} ${cookie ? "bogus cookie" : "no cookie"} → no data`, !marker.test(r.text) && !leaks(r.text).length, `${r.status} ${r.headers.get("x-action-redirect") ?? r.headers.get("location") ?? ""}`);
     }
@@ -692,7 +692,7 @@ async function bruteForce() {
   const row = db.prepare("SELECT fails, locked_until FROM sec_throttle WHERE key = ?").get(`ip:${x}`);
   const locked = row && row.locked_until > Date.now();
   check("login: 20 wrong passwords → lockout", locked && /Too many failed attempts|lockout|محاولات/i.test(last.text), `fails=${row?.fails} locked=${locked}`);
-  check("login: no Set-Cookie on failed sign-in", !setCookies.some((c) => /verda_admin=/.test(c)) && !last.headers.get("set-cookie"), setCookies.join(" | ").slice(0, 100));
+  check("login: no Set-Cookie on failed sign-in", !setCookies.some((c) => /vedra_admin=/.test(c)) && !last.headers.get("set-cookie"), setCookies.join(" | ").slice(0, 100));
   // CSRF on the server action itself: foreign Origin → Next refuses before the action runs (no throttle row appears)
   const y = ip();
   const c = await send(y, { origin: "https://evil.example", "sec-fetch-site": "cross-site" });

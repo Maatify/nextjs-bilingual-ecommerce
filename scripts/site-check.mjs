@@ -63,7 +63,7 @@ const browser = await chromium.launch().catch(() => chromium.launch({ channel: "
 const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
 await ctx.addInitScript(() => {
   try {
-    localStorage.setItem("verda:welcome", String(Date.now())); // keep the welcome pop-up out of the audit
+    localStorage.setItem("vedra:welcome", String(Date.now())); // keep the welcome pop-up out of the audit
   } catch {}
 });
 const jsSizes = new Map();

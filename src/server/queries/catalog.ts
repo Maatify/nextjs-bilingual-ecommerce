@@ -27,7 +27,6 @@ export function productRows(): ProductRow[] {
   return listProducts().map((p) => ({ product: p, sold: sold[p.id] ?? 0, stock: (p.variants?.length ? p.variants.reduce((n, v) => n + v.stock, 0) : p.sizes.reduce((n, s) => n + s.stock, 0)) }));
 }
 
-export { inCollection } from "@/components/admin/catalog/rules";
 
 export interface AssignableCollection {
   handle: string;

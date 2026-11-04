@@ -75,7 +75,7 @@ export function AnnouncementPreview({ items, nav, lang }: { items: NavLink[]; na
       </div>
       {nav ? (
         <div className="flex items-center gap-4 bg-white px-4 py-3 text-[#101310]">
-          <span className="font-poster text-[18px] leading-none">VERDA</span>
+          <span className="font-poster text-[18px] leading-none">VEDRA</span>
           <ul className="flex min-w-0 flex-1 items-center gap-3.5 overflow-hidden">
             <AnimatePresence initial={false}>
               {nav.map((l, i) => (

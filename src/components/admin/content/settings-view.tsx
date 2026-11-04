@@ -114,7 +114,7 @@ function StoreTab({ draft, set }: TabProps) {
             </Field>
           </div>
           <Field label={t("content.settings.storeUrl")} htmlFor="st-url" hint={t("content.settings.storeUrlHint")}>
-            <Input id="st-url" type="url" value={s.url} onChange={(e) => up({ url: e.target.value })} placeholder="https://verda.store" />
+            <Input id="st-url" type="url" value={s.url} onChange={(e) => up({ url: e.target.value })} placeholder="https://vedra.store" />
           </Field>
           <Field label={t("content.settings.descriptionLabel")} htmlFor="st-desc" aside={<Counter value={s.description} max={200} ideal={[110, 200]} />} hint={t("content.settings.descriptionHint")}>
             <Textarea id="st-desc" rows={3} value={s.description} onChange={(e) => up({ description: e.target.value })} />

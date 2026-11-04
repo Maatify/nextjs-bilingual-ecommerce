@@ -10,9 +10,6 @@ export { AdminI18nProvider, useT } from "./provider";
 
 /** Props for any input/textarea that holds Arabic store content. */
 export const arProps = { dir: "rtl", lang: "ar" } as const;
-/** Props for numbers / prices / phones / codes / URLs that must stay LTR inside Arabic text. */
-export const ltrProps = { dir: "ltr" } as const;
-
 /** Inline LTR isolate for numbers, prices, phones, SKUs inside translated text. */
 export function Ltr({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
@@ -21,14 +18,6 @@ export function Ltr({ children, className }: { children: React.ReactNode; classN
     </bdi>
   );
 }
-
-/** Count filled Arabic fields: pass [englishValue, arabicValue] pairs; pairs whose English is empty are ignored. */
-export function completeness(pairs: [unknown, unknown][]) {
-  const filled = (v: unknown) => (Array.isArray(v) ? v.some((x) => typeof x === "string" && x.trim()) : typeof v === "string" ? v.replace(/<[^>]*>/g, "").trim().length > 0 : !!v);
-  const relevant = pairs.filter(([en]) => filled(en));
-  return { done: relevant.filter(([, ar]) => filled(ar)).length, total: relevant.length };
-}
-
 /** "ترجمة 8/10" pill — green when complete, amber when partial, neutral when nothing translated. */
 export function TranslationMeter({ done, total, className, compact }: { done: number; total: number; className?: string; compact?: boolean }) {
   const { t } = useT();

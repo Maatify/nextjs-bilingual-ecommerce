@@ -265,13 +265,13 @@ export function WelcomeOffer() {
     if (!enabled || pathname.startsWith("/checkout") || hasCart) return;
     let seen = 0;
     try {
-      seen = Number(localStorage.getItem("verda:welcome") ?? 0);
+      seen = Number(localStorage.getItem("vedra:welcome") ?? 0);
     } catch {}
     if (Date.now() - seen < 3 * 864e5) return;
 
     const fire = () => {
       try {
-        localStorage.setItem("verda:welcome", String(Date.now()));
+        localStorage.setItem("vedra:welcome", String(Date.now()));
       } catch {}
       setOpen(true);
       cleanup();

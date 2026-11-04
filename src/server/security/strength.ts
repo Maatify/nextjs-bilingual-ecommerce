@@ -11,7 +11,7 @@ const COMMON = new Set([
   "passw0rd", "p@ssw0rd", "p@ssword", "qwerty", "qwerty123", "qwertyuiop", "asdfghjkl", "zxcvbnm", "1q2w3e4r", "1qaz2wsx",
   "abc123", "abcdef", "abcd1234", "iloveyou", "admin", "admin123", "admin1234", "administrator", "welcome", "welcome1",
   "letmein", "monkey", "dragon", "football", "sunshine", "princess", "master", "shadow", "superman", "trustno1", "changeme",
-  "secret", "test1234", "verda", "verda123", "verdaadmin", "egypt", "cairo", "egypt123", "cairo123",
+  "secret", "test1234", "vedra", "vedra123", "vedraadmin", "egypt", "cairo", "egypt123", "cairo123",
 ]);
 
 export interface Strength {
@@ -60,9 +60,9 @@ export function passwordStrength(pw: string): Strength {
 
   let hint: string | null = null;
   let code: Strength["code"] = null;
-  if (pw.length < MIN_PASSWORD_LENGTH) (hint = `Use at least ${MIN_PASSWORD_LENGTH} characters.`), (code = "short");
-  else if (/^\d+$/.test(pw)) (hint = "Digits only is easy to brute-force — mix in letters and symbols."), (code = "digits");
-  else if (score < 3) (hint = "Make it longer, or mix upper/lower case, numbers and symbols. A short phrase works well."), (code = "weak");
+  if (pw.length < MIN_PASSWORD_LENGTH) { hint = `Use at least ${MIN_PASSWORD_LENGTH} characters.`; code = "short"; }
+  else if (/^\d+$/.test(pw)) { hint = "Digits only is easy to brute-force — mix in letters and symbols."; code = "digits"; }
+  else if (score < 3) { hint = "Make it longer, or mix upper/lower case, numbers and symbols. A short phrase works well."; code = "weak"; }
   return { score, label: LABELS[score], hint, common, code };
 }
 

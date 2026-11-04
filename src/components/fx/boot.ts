@@ -1,6 +1,6 @@
 /* Shared by the client PageTransition and the server root layout (plain module — no "use client"). */
 
-export const FX_SEEN_KEY = "verda:fx-seen";
+export const FX_SEEN_KEY = "vedra:fx-seen";
 
 export const pathKey = (p: string) => p.replace(/^\/(?:ar|en)(?=\/|$)/, "").replace(/\/+$/, "") || "/";
 

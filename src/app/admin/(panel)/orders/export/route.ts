@@ -13,7 +13,7 @@ export async function GET(req: Request) {
   return new Response(ordersCsv(rows), {
     headers: {
       "Content-Type": "text/csv; charset=utf-8",
-      "Content-Disposition": `attachment; filename="verda-orders-${day}.csv"`,
+      "Content-Disposition": `attachment; filename="vedra-orders-${day}.csv"`,
       "Cache-Control": "no-store",
     },
   });

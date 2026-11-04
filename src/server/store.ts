@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
+import { LEGACY_NAME } from "@/lib/legacy-name";
 import { SEED_COLLECTIONS, SEED_PRODUCTS } from "@/lib/seed/catalog";
 import { SEED_SETTINGS, seedContent } from "@/lib/seed/content";
 import { adjustStock, normalizeVariants, reconcileSizeEdits, variantsFromSizes } from "@/lib/variants";
@@ -23,12 +24,20 @@ import type {
  * the exported functions.
  */
 
-const DB_PATH = process.env.VERDA_DB ?? path.join(process.cwd(), "data", "verda.db");
+/** VEDRA_DB, else the env var under the store's previous name, else data/vedra.db (or the previous name's file when only that exists). */
+function resolveDbPath() {
+  const fromEnv = process.env.VEDRA_DB ?? process.env[`${LEGACY_NAME.toUpperCase()}_DB`];
+  if (fromEnv) return fromEnv;
+  const current = path.join(process.cwd(), "data", "vedra.db");
+  const legacy = path.join(process.cwd(), "data", `${LEGACY_NAME}.db`);
+  return !fs.existsSync(/*turbopackIgnore: true*/ current) && fs.existsSync(/*turbopackIgnore: true*/ legacy) ? legacy : current;
+}
+export const DB_PATH = resolveDbPath();
 // Vercel starts every instance with an empty /tmp: copy the catalog snapshot (scripts/db-snapshot.mjs) into place first.
 // linkSync fails if the DB already exists, so concurrent build workers / cold starts never replace an open file.
 // turbopackIgnore: DB_PATH is env-driven; without the hint Turbopack traces the whole project (public/, src/) into
 // every server function. The snapshot itself is shipped via next.config outputFileTracingIncludes.
-const DB_SNAPSHOT = path.join(process.cwd(), "deploy", "verda.db");
+const DB_SNAPSHOT = path.join(process.cwd(), "deploy", "vedra.db");
 function restoreSnapshot() {
   if (!process.env.VERCEL || fs.existsSync(/*turbopackIgnore: true*/ DB_PATH) || !fs.existsSync(DB_SNAPSHOT)) return;
   const tmp = `${DB_PATH}.${process.pid}.tmp`;
@@ -37,7 +46,7 @@ function restoreSnapshot() {
   fs.rmSync(tmp, { force: true });
 }
 
-type G = typeof globalThis & { __verdaDb?: DatabaseSync; __verdaStore?: { snapshot: () => StoreSnapshot }; __verdaCache?: { v: number; snap: StoreSnapshot | null } };
+type G = typeof globalThis & { __vedraDb?: DatabaseSync; __vedraStore?: { snapshot: () => StoreSnapshot }; __vedraCache?: { v: number; snap: StoreSnapshot | null } };
 const g = globalThis as G;
 
 export function getDb() {
@@ -83,7 +92,7 @@ const sleepSync = (ms: number) => Atomics.wait(new Int32Array(new SharedArrayBuf
  * init is retried with a short back-off instead of failing the build.
  */
 function open() {
-  if (g.__verdaDb) return g.__verdaDb;
+  if (g.__vedraDb) return g.__vedraDb;
   fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
   restoreSnapshot();
   for (let attempt = 1; ; attempt++) {
@@ -91,7 +100,7 @@ function open() {
     try {
       return init(db);
     } catch (e) {
-      g.__verdaDb = undefined;
+      g.__vedraDb = undefined;
       try {
         db.close();
       } catch {}
@@ -121,10 +130,11 @@ function init(db: DatabaseSync) {
     CREATE TABLE IF NOT EXISTS review_requests (id TEXT PRIMARY KEY, token_hash TEXT UNIQUE NOT NULL, order_id TEXT NOT NULL, created_at TEXT NOT NULL, expires_at TEXT NOT NULL, used_at TEXT, revoked_at TEXT);
     CREATE INDEX IF NOT EXISTS review_requests_order ON review_requests(order_id);
   `);
-  g.__verdaDb = db;
+  g.__vedraDb = db;
   seedIfEmpty(db);
   migrateRealV1(db);
   migrateVariantsV1(db);
+  migrateNameVedra(db);
   return db;
 }
 
@@ -133,7 +143,7 @@ const now = () => new Date().toISOString();
 
 /* ───────────────────────── cache / snapshot ───────────────────────── */
 
-const cache = (g.__verdaCache ??= { v: 1, snap: null });
+const cache = (g.__vedraCache ??= { v: 1, snap: null });
 /** The snapshot also carries time-windowed numbers (sold in the last 24h), so it never lives longer than this. */
 const SNAP_TTL = 5 * 60_000;
 let snapBuiltAt = 0;
@@ -233,7 +243,7 @@ export function productProof(id: string): ProductProof {
 }
 
 // isomorphic accessors in src/lib/data.ts read through this
-g.__verdaStore = { snapshot };
+g.__vedraStore = { snapshot };
 
 /* ───────────────────────── settings & content ───────────────────────── */
 
@@ -345,9 +355,9 @@ export function listOrders(query: OrderQuery = {}): { rows: Order[]; total: numb
   const where: string[] = [];
   const args: (string | number)[] = [];
   if (query.status === "open") where.push("status IN ('pending','confirmed','packed','shipped')");
-  else if (query.status && query.status !== "all") (where.push("status = ?"), args.push(query.status));
-  if (query.from) (where.push("created_at >= ?"), args.push(query.from));
-  if (query.to) (where.push("created_at < ?"), args.push(query.to));
+  else if (query.status && query.status !== "all") { where.push("status = ?"); args.push(query.status); }
+  if (query.from) { where.push("created_at >= ?"); args.push(query.from); }
+  if (query.to) { where.push("created_at < ?"); args.push(query.to); }
   if (query.q) {
     where.push("(number LIKE ? OR phone LIKE ? OR data LIKE ?)");
     const like = `%${query.q}%`;
@@ -454,18 +464,6 @@ export function incrementStock(lines: StockLine[]) {
   applyStock(lines, 1);
 }
 
-/** Set one variant's stock to an absolute number. Returns false when the product/variant doesn't exist. */
-export function setVariantStock(productId: string, color: string, size: string, stock: number): boolean {
-  const p = getProduct(productId);
-  if (!p) return false;
-  const n = normalizeVariants(p);
-  const v = n.variants!.find((x) => x.color === color && x.size === size);
-  if (!v) return false;
-  v.stock = Math.max(0, Math.min(1_000_000, Math.round(Number(stock) || 0)));
-  saveProduct(n);
-  return true;
-}
-
 /* ───────────────────────── reviews ───────────────────────── */
 
 export function listReviews(): StoredReview[] {
@@ -521,12 +519,6 @@ export function getReviewRequestByHash(tokenHash: string): ReviewRequestRow | nu
 export function markReviewRequestUsed(id: string) {
   return Number(open().prepare("UPDATE review_requests SET used_at = ? WHERE id = ? AND used_at IS NULL").run(now(), id).changes) > 0;
 }
-export function reviewRequestsForOrder(orderId: string): ReviewRequestRow[] {
-  return (open().prepare("SELECT * FROM review_requests WHERE order_id = ? ORDER BY created_at DESC").all(orderId) as Record<string, unknown>[]).map((r) => reqRow(r)!);
-}
-export function deleteReviewRequestsForOrder(orderId: string) {
-  return Number(open().prepare("DELETE FROM review_requests WHERE order_id = ?").run(orderId).changes);
-}
 
 /* ───────────────────────── messages (contact form) ───────────────────────── */
 
@@ -559,9 +551,6 @@ export function deleteMessages(ids: string[]) {
   let n = 0;
   for (const id of ids) n += Number(st.run(id).changes);
   return n;
-}
-export function unreadMessageCount() {
-  return (open().prepare("SELECT COUNT(*) AS n FROM messages WHERE read = 0").get() as { n: number }).n;
 }
 
 /* ───────────────────────── media ───────────────────────── */
@@ -657,7 +646,7 @@ function seedIfEmpty(db: DatabaseSync) {
     db.prepare("INSERT OR REPLACE INTO kv (key, value) VALUES ('settings', ?)").run(JSON.stringify(SEED_SETTINGS));
     db.prepare("INSERT OR REPLACE INTO kv (key, value) VALUES ('content', ?)").run(JSON.stringify(seedContent(SEED_SETTINGS)));
     db.prepare("INSERT OR REPLACE INTO kv (key, value) VALUES ('migration:real-v1', ?)").run(JSON.stringify({ at: now(), fresh: true }));
-    db.prepare("INSERT INTO activity (at, actor, action, target, detail) VALUES (?, 'system', 'Store created', 'VERDA', 'Seeded catalog and content')").run(now());
+    db.prepare("INSERT INTO activity (at, actor, action, target, detail) VALUES (?, 'system', 'Store created', 'VEDRA', 'Seeded catalog and content')").run(now());
     db.exec("COMMIT");
   } catch (e) {
     db.exec("ROLLBACK");
@@ -697,6 +686,48 @@ function migrateVariantsV1(db: DatabaseSync) {
 
 /** Seed-generated review ids look like "p01-r3" (admin-written: "p01-m…", customer: "p01-u…"). */
 const GENERATED_REVIEW = /^p\d+-r\d+$/;
+
+/**
+ * The store was renamed (src/lib/legacy-name.ts): databases created before the rename still carry the old name in
+ * their settings, content pages and product / collection SEO text. Replace it once, keeping the case
+ * (UPPER → VEDRA, Title → Vedra, lower → vedra). Idempotent (kv flag "migration:name-vedra").
+ */
+function migrateNameVedra(db: DatabaseSync) {
+  const flagged = () => db.prepare("SELECT 1 FROM kv WHERE key = 'migration:name-vedra'").get();
+  if (flagged()) return;
+  const old = new RegExp(LEGACY_NAME, "gi");
+  const swap = (s: string) => s.replace(old, (m) => (m === m.toUpperCase() ? "VEDRA" : m[0] === m[0].toUpperCase() ? "Vedra" : "vedra"));
+  const update = {
+    kv: db.prepare("UPDATE kv SET value = ? WHERE key = ?"),
+    products: db.prepare("UPDATE products SET data = ? WHERE id = ?"),
+    collections: db.prepare("UPDATE collections SET data = ? WHERE handle = ?"),
+  };
+  let changed = 0;
+  db.exec("BEGIN IMMEDIATE");
+  try {
+    if (!flagged()) {
+      const rows = [
+        ...(db.prepare("SELECT 'kv' AS t, key AS k, value AS v FROM kv WHERE key IN ('settings', 'content')").all() as { t: "kv"; k: string; v: string }[]),
+        ...(db.prepare("SELECT 'products' AS t, id AS k, data AS v FROM products").all() as { t: "products"; k: string; v: string }[]),
+        ...(db.prepare("SELECT 'collections' AS t, handle AS k, data AS v FROM collections").all() as { t: "collections"; k: string; v: string }[]),
+      ];
+      for (const r of rows) {
+        const next = swap(r.v);
+        if (next !== r.v) {
+          update[r.t].run(next, r.k);
+          changed++;
+        }
+      }
+      db.prepare("UPDATE activity SET target = 'VEDRA' WHERE target = ?").run(LEGACY_NAME.toUpperCase());
+      db.prepare("INSERT OR REPLACE INTO kv (key, value) VALUES ('migration:name-vedra', ?)").run(JSON.stringify({ at: now(), rows: changed }));
+    }
+    db.exec("COMMIT");
+  } catch (e) {
+    db.exec("ROLLBACK");
+    throw e;
+  }
+  if (changed) bump();
+}
 
 /**
  * One-time cleanup for databases created before the store went real: back everything

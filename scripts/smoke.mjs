@@ -34,7 +34,7 @@ const page = await ctx.newPage();
 // mark the welcome pop-up as already seen so it can't cover the buttons (components/layout/overlays.tsx)
 await ctx.addInitScript(() => {
   try {
-    localStorage.setItem("verda:welcome", String(Date.now()));
+    localStorage.setItem("vedra:welcome", String(Date.now()));
   } catch {}
 });
 const problems = [];
@@ -93,8 +93,8 @@ await step("pick an in-stock size and add to bag", async () => {
     break;
   }
   await page.getByRole("button", { name: /add to bag/i }).first().click();
-  // cart store (src/lib/store.ts) persists to localStorage "verda:v1" → { cart: [{ productId, … }] }
-  await page.waitForFunction(() => (JSON.parse(localStorage.getItem("verda:v1") ?? "{}").cart ?? []).length > 0, null, { timeout: 8000 });
+  // cart store (src/lib/store.ts) persists to localStorage "vedra:v1" → { cart: [{ productId, … }] }
+  await page.waitForFunction(() => (JSON.parse(localStorage.getItem("vedra:v1") ?? "{}").cart ?? []).length > 0, null, { timeout: 8000 });
 });
 
 await step("cart shows the line and totals", async () => {

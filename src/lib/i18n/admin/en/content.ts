@@ -405,7 +405,7 @@ const content = {
     step1: "In your authenticator app, add an account and choose",
     step1Key: "enter a setup key",
     keyCopied: "Key copied",
-    account: "Account: VERDA Admin · Time-based · 6 digits · 30 s. On a phone, you can also",
+    account: "Account: VEDRA Admin · Time-based · 6 digits · 30 s. On a phone, you can also",
     openLink: "open the otpauth:// link",
     step2: "Enter the 6-digit code the app shows to finish:",
     verifyOn: "Verify & turn on",

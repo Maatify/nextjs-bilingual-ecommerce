@@ -30,7 +30,7 @@ const LABELS: Record<string, string> = {
   Returns: "الاستبدال والاسترجاع",
   "Size guide": "جدول المقاسات",
   FAQ: "الأسئلة الشائعة",
-  About: "عن VERDA",
+  About: "عن VEDRA",
   "Our story": "حكايتنا",
   Contact: "كلّمنا",
   Privacy: "الخصوصية",
@@ -110,8 +110,8 @@ function pagesAr(cutoff: number, freeAt: number, email: string, host: string): R
     about: {
       _title: "Our",
       title: "حكايتنا",
-      nav: "عن VERDA",
-      description: "VERDA بتعمل هوديز وسويت شيرت وتيشيرتات وبناطيل سويت وشورتات من قطن تقيل، للبس كل يوم ولسنين.",
+      nav: "عن VEDRA",
+      description: "VEDRA بتعمل هوديز وسويت شيرت وتيشيرتات وبناطيل سويت وشورتات من قطن تقيل، للبس كل يوم ولسنين.",
       intro: "قماش تقيل وقصّات بسيطة وألوان كتير. دي كل الفكرة.",
       sections: [
         { heading: "ست قطع بس، معمولين صح", body: ["بنعمل ست قطع أساسية بس: هودي، وهودي سوستة، وسويت شيرت، وتيشيرت، وبنطلون سويت، وشورت.", "مفيش تريندات بتروح وتيجي. القطع اللي بتمد إيدك عليها كل يوم الصبح وخلاص."] },
@@ -174,7 +174,7 @@ function pagesAr(cutoff: number, freeAt: number, email: string, host: string): R
       title: "جدول",
       accent: "المقاسات",
       nav: "جدول المقاسات",
-      description: "جدول مقاسات VERDA للهوديز والسويت شيرت والتيشيرتات وبناطيل السويت والشورتات، من XS لـ XXL بالسنتيمتر.",
+      description: "جدول مقاسات VEDRA للهوديز والسويت شيرت والتيشيرتات وبناطيل السويت والشورتات، من XS لـ XXL بالسنتيمتر.",
       intro: "مقاسات الجسم بالسنتيمتر. كل القطع للجنسين، من XS لـ XXL.",
       sections: [
         {
@@ -194,7 +194,7 @@ function pagesAr(cutoff: number, freeAt: number, email: string, host: string): R
       title: "المساعدة",
       accent: "والأسئلة",
       nav: "الأسئلة الشائعة",
-      description: "كل اللي محتاج تعرفه عن الدفع عند الاستلام والشحن والمقاسات وعرض اشتري 2 والتالتة ببلاش والاستبدال المجاني في VERDA.",
+      description: "كل اللي محتاج تعرفه عن الدفع عند الاستلام والشحن والمقاسات وعرض اشتري 2 والتالتة ببلاش والاستبدال المجاني في VEDRA.",
       intro: "إجابات سريعة. ولو سؤالك مش هنا، كلّمنا واتساب.",
     },
     contact: {
@@ -202,7 +202,7 @@ function pagesAr(cutoff: number, freeAt: number, email: string, host: string): R
       title: "كلّمنا",
       accent: "",
       nav: "كلّمنا",
-      description: "كلّم VERDA على واتساب أو بالتليفون أو الإيميل. اللي هيرد عليك واحد من الفريق، مش رد آلي.",
+      description: "كلّم VEDRA على واتساب أو بالتليفون أو الإيميل. اللي هيرد عليك واحد من الفريق، مش رد آلي.",
       intro: "اللي بيرد عليك واحد من الفريق. واتساب أسرع حاجة، بنرد في حوالي 10 دقايق.",
     },
     privacy: {
@@ -210,7 +210,7 @@ function pagesAr(cutoff: number, freeAt: number, email: string, host: string): R
       title: "سياسة",
       accent: "الخصوصية",
       nav: "الخصوصية",
-      description: "إزاي VERDA بتجمع بياناتك وبتستخدمها وبتحافظ عليها.",
+      description: "إزاي VEDRA بتجمع بياناتك وبتستخدمها وبتحافظ عليها.",
       intro: "آخر تحديث: 1 أكتوبر 2026. مش بناخد غير اللي محتاجينه، ومش بنبيع بياناتك لأي حد.",
       sections: [
         { heading: "بناخد إيه", body: ["لما تطلب: الاسم ورقم الموبايل والعنوان، والإيميل لو حبيت تكتبه.", "بيانات بسيطة عن جهازك من الكوكيز، عشان شنطتك تفضل محفوظة ونحسّن الموقع."] },
@@ -224,7 +224,7 @@ function pagesAr(cutoff: number, freeAt: number, email: string, host: string): R
       title: "شروط",
       accent: "الاستخدام",
       nav: "الشروط",
-      description: "الشروط اللي بتمشي على أي طلب من VERDA.",
+      description: "الشروط اللي بتمشي على أي طلب من VEDRA.",
       intro: `الشروط دي بتمشي على كل طلب من ${host}، ولما تأكد طلبك تبقى موافق عليها.`,
       sections: [
         { heading: "الأسعار", body: ["الأسعار بالجنيه المصري وشاملة ضريبة القيمة المضافة. لو حصل غلط واضح في سعر، من حقنا نلغي الطلب ونرجّعلك أي فلوس دفعتها كاملة."] },

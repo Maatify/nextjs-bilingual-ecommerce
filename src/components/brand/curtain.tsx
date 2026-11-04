@@ -5,7 +5,7 @@ import type { Locale } from "@/lib/types";
  * (the storefront root layout doesn't remount). Pure CSS so it starts at first paint, before hydration:
  *
  *   0.00s  ink curtain covers the page; two full-width offer tapes cross behind the centre as an X and
- *          start scrolling; the VERDA wordmark rises in on top
+ *          start scrolling; the VEDRA wordmark rises in on top
  *   0.25s  a sage underline draws, the tagline fades up
  *   1.05s  the wordmark lifts away, then the curtain (straight edge, sage under-layer a beat behind)
  *          rolls UP off the screen, revealing the page

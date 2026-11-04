@@ -116,11 +116,6 @@ export function Badge({ children, tone = "light", className }: { children: React
   };
   return <span className={cx("inline-flex h-6 items-center rounded-full px-2.5 text-[11px] font-semibold tracking-wide", tones[tone], className)}>{children}</span>;
 }
-
-export function Eyebrow({ children, className }: { children: ReactNode; className?: string }) {
-  return <p className={cx("text-[12px] font-semibold uppercase tracking-[0.14em] text-muted", className)}>{children}</p>;
-}
-
 export function QtyStepper({ value, onChange, min = 1, max = 10, size = "md", label }: { value: number; onChange: (n: number) => void; min?: number; max?: number; size?: "sm" | "md"; label?: string }) {
   const { d } = useI18n();
   label ??= d.common.ui.quantity;
@@ -162,19 +157,5 @@ export function Pill({ children, dot = "bg-sale", className }: { children: React
       <span className={cx("size-1.5 rounded-full", dot)} aria-hidden />
       {children}
     </span>
-  );
-}
-
-export function SectionHeading({ eyebrow, title, accent, action, className }: { eyebrow?: string; title: string; accent?: string; action?: ReactNode; className?: string }) {
-  return (
-    <div className={cx("mb-6 flex items-end justify-between gap-4 md:mb-8", className)}>
-      <div>
-        {eyebrow ? <Eyebrow className="mb-2">{eyebrow}</Eyebrow> : null}
-        <h2 className="text-h2 text-balance">
-          {title} {accent ? <span className="serif-accent text-forest">{accent}</span> : null}
-        </h2>
-      </div>
-      {action}
-    </div>
   );
 }

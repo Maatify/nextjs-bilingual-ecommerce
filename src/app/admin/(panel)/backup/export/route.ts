@@ -9,7 +9,7 @@ export async function GET() {
   const data = exportAll();
   const slug = (getSettings().site.name || "store").toLowerCase().replace(/[^a-z0-9]+/g, "-");
   const stamp = new Date().toISOString().slice(0, 16).replace(/[:T]/g, "-");
-  return new Response(JSON.stringify({ format: "verda-backup", version: 1, ...data }, null, 2), {
+  return new Response(JSON.stringify({ format: "vedra-backup", version: 1, ...data }, null, 2), {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       "Content-Disposition": `attachment; filename="${slug}-backup-${stamp}.json"`,

@@ -117,6 +117,7 @@ export function AreaChart<T extends { label: string }>({
         const area = pts.length ? `${line} L${x(data.length - 1)},${m.t + ih} L${x(0)},${m.t + ih} Z` : "";
         return { ...s, line, area };
       }),
+    // x/y/m/ih are recreated every render but derive only from these inputs, so listing them would recompute every time
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [data, series, width, height, max],
   );

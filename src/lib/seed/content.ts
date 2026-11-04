@@ -4,16 +4,16 @@ import type { ContentPage, FaqGroup, StoreContent, StoreSettings } from "../type
 
 export const SEED_SETTINGS: StoreSettings = {
   site: {
-    name: "VERDA",
-    legalName: "VERDA Studio LLC",
-    url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://verda.store",
+    name: "VEDRA",
+    legalName: "VEDRA Studio LLC",
+    url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://vedra.store",
     description:
       "Heavyweight hoodies, sweatshirts, tees, sweatpants and shorts in every colour. Buy 2 Get 1 Free, cash on delivery across Egypt, free 14-day exchanges.",
     whatsapp: "201000000000",
     phone: "+20 100 000 0000",
-    email: "care@verda.store",
-    instagram: "https://instagram.com/verda",
-    tiktok: "https://tiktok.com/@verda",
+    email: "care@vedra.store",
+    instagram: "https://instagram.com/vedra",
+    tiktok: "https://tiktok.com/@vedra",
     currency: "EGP",
   },
   offer: {
@@ -33,7 +33,7 @@ export const SEED_SETTINGS: StoreSettings = {
   },
   promoCodes: [
     { code: "WELCOME10", pct: 10, label: "10% off your first order", active: true, used: 0 },
-    { code: "VERDA15", pct: 15, label: "15% off", active: true, used: 0 },
+    { code: "VEDRA15", pct: 15, label: "15% off", active: true, used: 0 },
     { code: "SAVE200", amount: 200, label: "EGP 200 off", minSubtotal: 1500, active: true, used: 0 },
   ],
   governorates: [
@@ -111,7 +111,7 @@ export function seedContent(s: StoreSettings): StoreContent {
     title: "Our",
     accent: "story",
     nav: "About",
-    description: "VERDA makes heavyweight basics — hoodies, crewnecks, tees, sweatpants and shorts — built to wear every day and last for years.",
+    description: "VEDRA makes heavyweight basics — hoodies, crewnecks, tees, sweatpants and shorts — built to wear every day and last for years.",
     intro: "Heavy fabric. Clean cuts. Every colour. That's the whole idea.",
     sections: [
       {
@@ -172,7 +172,7 @@ export function seedContent(s: StoreSettings): StoreContent {
     title: "Returns &",
     accent: "exchanges",
     nav: "Returns",
-    description: "Free 14-day size exchanges at your door, and easy returns on unworn pieces at VERDA.",
+    description: "Free 14-day size exchanges at your door, and easy returns on unworn pieces at VEDRA.",
     intro: "Wrong size? We swap it free, at your door.",
     sections: [
       {
@@ -198,7 +198,7 @@ export function seedContent(s: StoreSettings): StoreContent {
     title: "Size",
     accent: "guide",
     nav: "Size guide",
-    description: "VERDA size charts for hoodies, crewnecks, tees, sweatpants and shorts (XS–XXL), in centimetres.",
+    description: "VEDRA size charts for hoodies, crewnecks, tees, sweatpants and shorts (XS–XXL), in centimetres.",
     intro: "Body measurements in cm. Every piece is unisex, XS to XXL.",
     sections: [
       {
@@ -218,7 +218,7 @@ export function seedContent(s: StoreSettings): StoreContent {
     title: "Help &",
     accent: "FAQ",
     nav: "FAQ",
-    description: "Answers about cash on delivery, shipping, fit, Buy 2 Get 1 and free exchanges at VERDA.",
+    description: "Answers about cash on delivery, shipping, fit, Buy 2 Get 1 and free exchanges at VEDRA.",
     intro: "Quick answers. Still stuck? WhatsApp us.",
     sections: [],
   },
@@ -227,7 +227,7 @@ export function seedContent(s: StoreSettings): StoreContent {
     title: "Get in",
     accent: "touch",
     nav: "Contact",
-    description: "Contact VERDA on WhatsApp, phone or email. Real people, fast replies, 7 days a week.",
+    description: "Contact VEDRA on WhatsApp, phone or email. Real people, fast replies, 7 days a week.",
     intro: "Real people. WhatsApp is fastest — about 10 minutes.",
     sections: [],
   },
@@ -236,7 +236,7 @@ export function seedContent(s: StoreSettings): StoreContent {
     title: "Privacy",
     accent: "policy",
     nav: "Privacy",
-    description: "How VERDA collects, uses and protects your personal information.",
+    description: "How VEDRA collects, uses and protects your personal information.",
     intro: "Updated 1 October 2026. We collect only what we need. We never sell your data.",
     sections: [
       { heading: "What we collect", body: ["Name, phone, address and (optionally) email when you order.", "Basic device data through cookies, to keep your bag and improve the site."] },
@@ -250,7 +250,7 @@ export function seedContent(s: StoreSettings): StoreContent {
     title: "Terms of",
     accent: "service",
     nav: "Terms",
-    description: "The terms that apply when you shop at VERDA.",
+    description: "The terms that apply when you shop at VEDRA.",
     intro: `These terms cover every order on ${s.site.url.replace("https://", "")}. Placing an order means you agree.`,
     sections: [
       { heading: "Prices", body: ["Prices are in EGP and include VAT. If a price is clearly wrong, we may cancel the order and refund you in full."] },

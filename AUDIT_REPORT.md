@@ -8,25 +8,25 @@ Legend: ✅ fixed · ✅ already OK · ⚠️ open item · ❌ couldn't be verif
 
 ## 1. Checklist status
 
-### 1. Bugs & code health
+### 1.1 Bugs & code health
 
 | Item | Status | Notes |
 |---|---|---|
-| `npm run lint` → 0 errors | ✅ | 0 errors, 27 warnings (`no-unused-expressions` style in admin/server code, style only). |
+| `npm run lint` → 0 errors | ✅ | 0 errors, 0 warnings. The 27 `no-unused-expressions` comma sequences were rewritten as plain if-blocks (same order and short-circuiting). |
 | Typecheck → 0 errors | ✅ | 0 errors. On a fresh checkout the route types (`PageProps`, `LayoutProps`, `RouteContext`) must be generated first, so `npm run typecheck` runs `next typegen && tsc --noEmit` (§8). |
 | `npm run build` | ✅ | Clean, no warnings; 88 pages generated on a fresh checkout. |
 | Prod build click-through (home → category → sort → product → size → bag → qty → reload → checkout validation → search → AR/RTL) | ✅ | Automated as `tests/e2e/flow.spec.ts`; passes in Chromium, Firefox, WebKit, iPhone 13, Pixel 7, iPad. No hydration errors, no console errors, no failed requests. Order submit is mocked (never creates an order). |
 | Edge cases | ✅ already OK | Unknown product → real 404 (E2E + `test:site`); empty cart/wishlist states; `error.tsx` bilingual; sold-out sizes disabled with notify; long names wrap (280 px matrix). |
-| Dead code / unused deps / console.logs | ✅ already OK | `knip`: no unused deps; the only "unused" file is `src/lib/image-loader.ts` (false positive, it is `images.loaderFile`). No `console.log` in `src/`. |
-| `npm audit`; Next/React patched | ✅ / ⚠️ | `npm audit --omit=dev` = 0. Dev-only advisories in the ESLint and `@lhci/cli` toolchains (fixed by semver-major bumps of eslint / `@lhci/cli` 0.16.0, released 2026-11-02), not shipped. Next 16.4.4 and React 19.2.9 were released 2026-11-02; npm audit lists no advisory for 16.4.3 / 19.2.8, so they were not bumped during the audit. ⚠️ Bump after a short soak. |
+| Dead code / unused deps / console.logs | ✅ fixed | `knip` (config in `knip.json`): no unused files or dependencies; unused exports removed, one left on purpose (`IMG` in `src/lib/seed/catalog.ts`, seed data is kept as shipped). `src/lib/image-loader.ts` is ignored because it is `images.loaderFile`. No `console.log` in `src/`. |
+| `npm audit`; Next/React patched | ✅ / ⚠️ | `npm audit --omit=dev` = 0. Dev-only advisories (18 per osv-scanner, 36 per `npm audit`) in ESLint / Lighthouse CI tooling, not shipped (fixed by semver-major bumps of eslint / `@lhci/cli` 0.16.0, released 2026-11-02), not shipped. Next 16.4.4 and React 19.2.9 were released 2026-11-02; npm audit lists no advisory for 16.4.3 / 19.2.8, so they were not bumped during the audit. ⚠️ Bump after a short soak. |
 | Tests | ✅ | `npm test` (unit), `npm run test:smoke`, `npm run test:site`, `npm run test:e2e` (Playwright, 6 projects + layout sweep). |
 
-### 2. SEO in the code
+### 1.2 SEO in the code
 
 | Item | Status | Notes |
 |---|---|---|
 | robots: disallows cart/checkout/search/wishlist/review/admin/api + collection `?` filter URLs; AI bots allowed explicitly; Sitemap line; no Crawl-delay | ✅ already OK | Checked with `curl /robots.txt`. |
-| sitemap: data-driven, real `updatedAt`, hreflang alternates, images | ✅ already OK | 60 URLs, valid XML. |
+| sitemap: data-driven, real `updatedAt`, hreflang alternates, images | ✅ already OK | One URL per language for every product, visible collection and content page (60 URLs with the demo catalog), valid XML. |
 | One site URL source | ✅ already OK | `NEXT_PUBLIC_SITE_URL` overrides Settings for every absolute URL; no hardcoded domain/localhost in `src/`. |
 | Unique title ≤ 60 / description ≤ 155 | ✅ fixed | All 60 sitemap URLs + cart/checkout/search/wishlist crawled: titles all ≤ 60. Two product pages had 158-character generated descriptions; the generated description now drops its "Cash on delivery, free 14-day exchanges." tail when it would pass 155 (`products/[handle]/page.tsx`). Merchant-written SEO descriptions are untouched. |
 | canonical, noindex on cart/checkout/search/thank-you/track, OG/Twitter, hreflang + x-default, `<html lang dir>` | ✅ already OK | |
@@ -37,12 +37,12 @@ Legend: ✅ fixed · ✅ already OK · ⚠️ open item · ❌ couldn't be verif
 | JSON-LD (ProductGroup/Offer, Organization, WebSite+SearchAction, BreadcrumbList, ItemList, FAQPage) from the same data as the page | ✅ already OK | |
 | Content / llms.txt | ⚠️ / ✅ | Placeholder business details (§7); `llms.txt` served. |
 
-### 3. Performance (numbers in §2)
+### 1.3 Performance (numbers in §2)
 
 | Item | Status | Notes |
 |---|---|---|
 | next/image, sizes, LCP priority/fetchPriority, lazy below the fold | ✅ already OK | Product and collection LCP image is preloaded with `fetchPriority=high`, in the initial HTML. |
-| Image compression with SSIMULACRA2 gate, backups, `npm run optimize:images` | ✅ already OK | 594 WebPs, 8.77 MB. Files replaced during the audit were run through the gate: none could be made smaller at SSIMULACRA2 ≥ 90, so the originals were kept. |
+| Image compression with SSIMULACRA2 gate, backups, `npm run optimize:images` | ✅ already OK | 594 WebPs, 8.8 MB. Files replaced during the audit were run through the gate: none could be made smaller at SSIMULACRA2 ≥ 90, so the originals were kept. |
 | Unused assets | ✅ already OK | All 594 images are referenced by the catalog. |
 | Static/ISR, no accidental dynamic APIs | ✅ already OK | |
 | Client JS | ⚠️ partial | ~280 KB gz first load; `motion` ≈ 46 KB gz of it. |
@@ -51,13 +51,15 @@ Legend: ✅ fixed · ✅ already OK · ⚠️ open item · ❌ couldn't be verif
 | Render-blocking CSS / inline CSS | ✅ | Storefront CSS split from the admin's (190 KB → 115 KB raw, verified pixel-identical on 28 screenshots). `inlineCss` kept off: no Lighthouse gain (home mobile 98–99 either way) and ~20 KB gz more per HTML response. |
 | Prefetch on large link lists | ✅ fixed | Footer link grid: `prefetch={false}` (`src/components/layout/footer.tsx`), about 15 fewer RSC prefetches per page that reaches the footer; no visual change. |
 | bfcache | ✅ already OK | No `unload` listeners; HTML not `no-store`. |
-| LCP < 2.5 s mobile on product/collection pages | ❌ not reached | See §2. |
+| LCP < 2.5 s mobile on product/collection pages | ⚠️ not reached | See §2. |
 | Before/after screenshots identical | ✅ | 28/28 identical (390 + 1440 px). |
 | Lighthouse CI budget | ✅ | `lighthouserc.json`: accessibility ≥ 0.95, best practices ≥ 0.95, SEO = 1 on indexable pages, CLS ≤ 0.1; performance error floor 0.75 with a 0.9 warning target (§8). |
 
-### 4. Security — see §4
+### 1.4 Security (results in §4)
 
-### 5. Accessibility & UX
+See §4 for the security test results, dependency scans and secrets checks.
+
+### 1.5 Accessibility & UX
 
 | Item | Status | Notes |
 |---|---|---|
@@ -65,7 +67,7 @@ Legend: ✅ fixed · ✅ already OK · ⚠️ open item · ❌ couldn't be verif
 | No horizontal scroll, RTL | ✅ already OK | 0 overflow in 1,392 page loads (§5). |
 | Price / stock / delivery / WhatsApp on the product page | ✅ already OK | |
 
-### 6. Quality automation
+### 1.6 Quality automation
 
 | Item | Status | Notes |
 |---|---|---|
@@ -75,7 +77,7 @@ Legend: ✅ fixed · ✅ already OK · ⚠️ open item · ❌ couldn't be verif
 | Visual regression | ⚠️ partial | Screenshot sweep + pixel comparison done for this audit; no committed `toHaveScreenshot` baselines (they would need per-OS baselines in CI). |
 | Pre-commit / CI / budgets | ✅ | husky + lint-staged; GitHub Actions workflow (§8). |
 
-### 6b. Advanced SEO / GEO / AEO
+### 1.7 Advanced SEO / GEO / AEO
 
 | Item | Status | Notes |
 |---|---|---|
@@ -124,7 +126,7 @@ PageSpeed Insights could not be run during the audit because the site was not de
 | Tool / test | Result |
 |---|---|
 | `npm audit --omit=dev` | ✅ 0 |
-| osv-scanner (lockfile) | ✅ 0 in production deps; 18 dev-only (basic-ftp, brace-expansion, extract-zip, minimatch, tmp, uuid, zod via eslint / `@lhci/cli`), not shipped. ⚠️ Bump `@lhci/cli` to 0.16 / the eslint toolchain when convenient. |
+| osv-scanner (lockfile) | ✅ 0 in production dependencies; dev-only advisories (18 per osv-scanner, 36 per `npm audit`) in ESLint / Lighthouse CI tooling (basic-ftp, brace-expansion, extract-zip, minimatch, tmp, uuid, zod), not shipped. ⚠️ Bump `@lhci/cli` to 0.16 / the eslint toolchain when convenient. |
 | semgrep (`p/nextjs`, `p/owasp-top-ten`, `p/secrets`, `p/typescript`) | ✅ 1 finding, accepted: `dangerouslySetInnerHTML` in `pdp/product-details.tsx` renders the admin's description through `sanitizeRichText` (allowlist). |
 | gitleaks | ✅ No secrets in source, scripts, tests or `public/` (the only hits were the local, git-ignored `.env.local` and Next's generated keys in the `.next/` build output). |
 | Client bundle grep (`.next/static`) | ✅ No keys, tokens, DB paths or emails; only UI strings like "Admin password". |

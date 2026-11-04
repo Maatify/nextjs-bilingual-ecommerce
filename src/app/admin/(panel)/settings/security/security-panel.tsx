@@ -171,7 +171,7 @@ function PasswordCard({ info, onChanged }: { info: SecurityOverview["password"];
 
 function RecoveryCodes({ codes, onDone }: { codes: string[]; onDone: () => void }) {
   const { t } = useT();
-  const text = `VERDA admin recovery codes\nEach code works once.\n\n${codes.join("\n")}\n`;
+  const text = `VEDRA admin recovery codes\nEach code works once.\n\n${codes.join("\n")}\n`;
   return (
     <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3, ease }} className="space-y-3">
       <p className="flex items-start gap-2 rounded-xl border border-a-warn/30 bg-a-warn/10 p-3 text-[12.5px] leading-relaxed text-a-dim">
@@ -204,7 +204,7 @@ function RecoveryCodes({ codes, onDone }: { codes: string[]; onDone: () => void 
           onClick={() => {
             const a = document.createElement("a");
             a.href = URL.createObjectURL(new Blob([text], { type: "text/plain" }));
-            a.download = "verda-recovery-codes.txt";
+            a.download = "vedra-recovery-codes.txt";
             a.click();
             setTimeout(() => URL.revokeObjectURL(a.href), 1000);
           }}

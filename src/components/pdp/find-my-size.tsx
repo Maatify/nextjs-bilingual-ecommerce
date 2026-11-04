@@ -10,7 +10,7 @@ import { CHARTS, recommend, type Body, type FitPref } from "@/lib/size";
 import type { Product } from "@/lib/types";
 
 type Tab = "finder" | "chart";
-const KEY = "verda:fit";
+const KEY = "vedra:fit";
 
 interface Inputs {
   height: number;

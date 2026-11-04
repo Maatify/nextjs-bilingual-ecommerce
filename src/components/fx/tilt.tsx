@@ -124,12 +124,3 @@ function untransformedRect(el: HTMLElement) {
   const cy = r.top + r.height / 2;
   return new DOMRect(cx - w / 2, cy - h / 2, w, h);
 }
-
-/** A child of <Tilt3D> lifted toward the viewer by `depth` px. */
-export function TiltLayer({ depth = 24, className, children }: { depth?: number; className?: string; children: React.ReactNode }) {
-  return (
-    <div className={cx("tilt-z", className)} style={{ "--z": `${depth}px` } as React.CSSProperties}>
-      {children}
-    </div>
-  );
-}

@@ -16,7 +16,7 @@ export function I18nProvider({ locale, dict, children }: { locale: Locale; dict:
 /** { locale, d, t, p, money, href, product, collection, color, gov, … } — see src/lib/i18n/store/kit.ts */
 export function useI18n(): I18n {
   const v = useContext(Ctx);
-  if (!v) throw new Error("[verda] useI18n() outside <I18nProvider>");
+  if (!v) throw new Error("[vedra] useI18n() outside <I18nProvider>");
   return useMemo(() => makeI18n(v.locale, v.dict), [v]);
 }
 

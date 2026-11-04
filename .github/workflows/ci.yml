@@ -6,9 +6,14 @@ on:
   push:
     branches: [main]
 
+permissions: { contents: read }
+
+concurrency: { group: "ci-${{ github.ref }}", cancel-in-progress: true }
+
 jobs:
   check:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     env:
       # throwaway values for CI only: the build seeds a fresh SQLite store in data/
       ADMIN_PASSWORD: ci-only-${{ github.run_id }}-pass

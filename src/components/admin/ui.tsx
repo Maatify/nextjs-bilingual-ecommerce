@@ -697,32 +697,11 @@ export function useDraft<T>(saved: T) {
   const dirty = JSON.stringify(draft) !== savedKey;
   return [draft, setDraft, dirty, () => setDraft(saved)] as const;
 }
-
-/* ───────────── Misc ───────────── */
-
-const AdminCtx = createContext<{ currency: string }>({ currency: "EGP" });
-export const useAdmin = () => useContext(AdminCtx);
-export const AdminProvider = AdminCtx.Provider;
-
 export const egp = (n: number) => `EGP ${Math.round(n).toLocaleString("en")}`;
-
-/** @deprecated in translated UI — use `useT().fmt.ago(iso)` (locale-aware). Kept for English-only callers. */
-export function timeAgo(iso: string) {
-  const s = Math.max(1, Math.round((Date.now() - new Date(iso).getTime()) / 1000));
-  if (s < 60) return `${s}s ago`;
-  const m = Math.round(s / 60);
-  if (m < 60) return `${m}m ago`;
-  const h = Math.round(m / 60);
-  if (h < 24) return `${h}h ago`;
-  const d = Math.round(h / 24);
-  if (d < 30) return `${d}d ago`;
-  return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
-}
-
 /* ───────────── Theme (dark / light / system) ───────────── */
 
 export type AdminTheme = "dark" | "light" | "system";
-export const ADMIN_THEME_COOKIE = "verda_admin_theme";
+export const ADMIN_THEME_COOKIE = "vedra_admin_theme";
 const ThemeCtx = createContext<{ theme: AdminTheme; setTheme: (t: AdminTheme, origin?: { x: number; y: number }) => void }>({ theme: "dark", setTheme: () => {} });
 export const useAdminTheme = () => useContext(ThemeCtx);
 

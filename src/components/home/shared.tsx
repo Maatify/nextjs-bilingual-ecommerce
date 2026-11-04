@@ -1,17 +1,9 @@
 import Link from "@/components/i18n/link";
 import type { ReactNode } from "react";
 import { Icon } from "@/components/ui/icon";
-import { getProductById, getProducts } from "@/lib/catalog";
+import { getProducts } from "@/lib/catalog";
 import { snapshot } from "@/lib/data";
 import { cx } from "@/lib/format";
-
-/** First photo of a product in a named colour (falls back to the first colour). */
-export function photo(productId: string, color: string, n = 0) {
-  const p = getProductById(productId);
-  const c = p?.colors.find((x) => x.name === color) ?? p?.colors[0];
-  return c?.images[n] ?? c?.images[0] ?? "";
-}
-
 /** Store-wide rating from REAL published reviews only (count 0 → callers hide rating claims). */
 export function getStoreRating() {
   const live = new Set(getProducts().map((p) => p.id));

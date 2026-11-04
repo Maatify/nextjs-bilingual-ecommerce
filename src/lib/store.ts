@@ -1,6 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { migrateLegacyStorage } from "./legacy-name";
 import type { CartLine } from "./types";
 
 /**
@@ -20,7 +21,9 @@ export interface State {
   hydrated: boolean;
 }
 
-const KEY = "verda:v1";
+const KEY = "vedra:v1";
+// carry the cart, wishlist and other saved choices over from before the rename (runs once per browser)
+migrateLegacyStorage();
 const empty: State = { cart: [], wishlist: [], recent: [], cartOpen: false, searchOpen: false, promo: null, toast: null, hydrated: false };
 
 let state: State = empty;

@@ -12,7 +12,7 @@ import { Badge, Button, Card, ConfirmButton, Drawer, EmptyState, Field, IconBtn,
 import { copyText } from "./bits";
 
 const CODE_RE = /^[A-Z0-9_-]{3,24}$/;
-const WORDS = ["VERDA", "STYLE", "FRESH", "DROP", "EDIT", "LOOK", "FIT", "NEW"];
+const WORDS = ["VEDRA", "STYLE", "FRESH", "DROP", "EDIT", "LOOK", "FIT", "NEW"];
 
 function generateCode() {
   const w = WORDS[Math.floor(Math.random() * WORDS.length)];

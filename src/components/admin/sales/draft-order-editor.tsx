@@ -437,7 +437,7 @@ function ProductPicker({ products, onAdd, inOrder }: { products: PickerProduct[]
           onFocus={() => setFocus(true)}
           onBlur={() => setTimeout(() => setFocus(false), 150)}
           onKeyDown={(e) => {
-            if (e.key === "Enter" && results[0]) (e.preventDefault(), choose(results[0]));
+            if (e.key === "Enter" && results[0]) { e.preventDefault(); choose(results[0]); }
             if (e.key === "Escape") setFocus(false);
           }}
           className="ps-9"

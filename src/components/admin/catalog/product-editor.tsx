@@ -495,7 +495,7 @@ export function ProductEditor({ product, isNew, options, sold = 0 }: { product: 
             }
           >
             <div dir={isAr ? "rtl" : "ltr"} lang={cl} className="rounded-xl bg-white p-4 text-start text-[#202124] ring-1 ring-black/5">
-              <p dir="ltr" className="truncate text-start text-[12px] text-[#4d5156] rtl:text-end">verda · {isAr ? "/ar" : ""}/products/{p.handle || "…"}</p>
+              <p dir="ltr" className="truncate text-start text-[12px] text-[#4d5156] rtl:text-end">vedra · {isAr ? "/ar" : ""}/products/{p.handle || "…"}</p>
               <p className="mt-1 line-clamp-1 text-[18px] leading-snug text-[#1a0dab]">{seoTitle}</p>
               <p className="mt-1 line-clamp-2 text-[13px] leading-relaxed text-[#4d5156]">{seoDesc}</p>
             </div>
@@ -527,7 +527,7 @@ export function ProductEditor({ product, isNew, options, sold = 0 }: { product: 
                       label={t("products.seo.handle")}
                       htmlFor="handle"
                       error={show("handle")}
-                      hint={<bdi dir="ltr">{`verda · /products/${p.handle || "…"}`}</bdi>}
+                      hint={<bdi dir="ltr">{`vedra · /products/${p.handle || "…"}`}</bdi>}
                       aside={
                         handleTouched ? (
                           <button

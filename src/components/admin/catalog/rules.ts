@@ -1,5 +1,4 @@
-import type { TFn } from "@/lib/i18n/admin";
-import type { Collection, CollectionRule, Product } from "@/lib/types";
+import type { CollectionRule, Product } from "@/lib/types";
 
 /* Pure collection-rule helpers shared by the admin server queries and client editors. */
 
@@ -16,22 +15,5 @@ export function matchesRule(rule: CollectionRule, p: RuleProduct) {
       return p.collections.includes(rule.tag);
     case "manual":
       return rule.productIds.includes(p.id);
-  }
-}
-
-export const inCollection = (c: Collection, p: RuleProduct) => matchesRule(c.rule, p);
-
-export function ruleSummary(rule: CollectionRule, titles?: Record<string, string>, t?: TFn) {
-  switch (rule.type) {
-    case "all":
-      return t ? t("catalog.rules.all") : "All products";
-    case "sale":
-      return t ? t("catalog.rules.sale") : "Products on sale";
-    case "tag": {
-      const tag = titles?.[rule.tag] ?? rule.tag;
-      return t ? t("catalog.rules.tagged", { tag }) : `Tagged “${tag}”`;
-    }
-    case "manual":
-      return t ? t("catalog.rules.manual", { count: rule.productIds.length }) : `${rule.productIds.length} hand-picked`;
   }
 }

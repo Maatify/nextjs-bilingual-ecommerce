@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import {
   allOrders,
+  DB_PATH,
   getContent,
   getSettings,
   listActivity,
@@ -283,7 +284,7 @@ export function analyticsStats(range: AnalyticsRange, locale: AdminLocale = "en"
   const daily = new Map(keys.map((k) => [k, { revenue: 0, orders: 0 }]));
   for (const o of counted) {
     const d = daily.get(local(o.createdAt).day);
-    if (d) (d.revenue += revenueOf(o), (d.orders += 1));
+    if (d) { d.revenue += revenueOf(o); d.orders += 1; }
   }
   const days = keys.map((k) => ({ key: k, label: dayLabel(k, locale), ...daily.get(k)! }));
   const weeks: typeof days = [];
@@ -440,7 +441,7 @@ export function dbInfo(locale: AdminLocale = "en") {
   const products = listProducts();
   const content = getContent();
   const settings = getSettings();
-  const file = process.env.VERDA_DB ?? path.join(/* turbopackIgnore: true */ process.cwd(), "data", "verda.db");
+  const file = DB_PATH;
   let size = 0;
   for (const f of [file, `${file}-wal`]) {
     try {

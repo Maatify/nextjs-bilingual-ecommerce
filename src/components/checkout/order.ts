@@ -37,7 +37,7 @@ export interface OrderSnapshot {
   };
 }
 
-export const ORDER_KEY = "verda:lastOrder";
+export const ORDER_KEY = "vedra:lastOrder";
 
 /** Delivery window: same-day dispatch before the cut-off, then the governorate's transit days. */
 export function deliveryWindow(days: [number, number], express: boolean, now = new Date()) {

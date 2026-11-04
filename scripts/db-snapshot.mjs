@@ -1,7 +1,7 @@
-// Copies the local store DB (data/verda.db) to deploy/verda.db for Vercel, minus anything private: admin password and
+// Copies the local store DB (data/vedra.db) to deploy/vedra.db for Vercel, minus anything private: admin password and
 // sessions, orders, checkouts, subscribers, messages, the activity log and every security table. Catalog, reviews,
 // content and settings stay. On Vercel, store.ts copies this file into the empty /tmp DB path on first open.
-// Run before deploying: npm run db:snapshot   (VERDA_DB=deploy/verda.db re-sanitizes the shipped snapshot in place)
+// Run before deploying: npm run db:snapshot   (VEDRA_DB=deploy/vedra.db re-sanitizes the shipped snapshot in place)
 //
 // The published snapshot is also normalised so the demo can't mislead:
 // - cash on delivery only: no payment gateway is integrated, so card / wallet / installments are switched off;
@@ -10,9 +10,12 @@
 import { DatabaseSync } from "node:sqlite";
 import fs from "node:fs";
 import path from "node:path";
+import { LEGACY_NAME } from "../src/lib/legacy-name.ts";
 
-const src = path.resolve(process.env.VERDA_DB ?? path.join(process.cwd(), "data", "verda.db"));
-const out = path.join(process.cwd(), "deploy", "verda.db");
+const current = path.join(process.cwd(), "data", "vedra.db");
+const legacy = path.join(process.cwd(), "data", `${LEGACY_NAME}.db`);
+const src = path.resolve(process.env.VEDRA_DB ?? process.env[`${LEGACY_NAME.toUpperCase()}_DB`] ?? (!fs.existsSync(current) && fs.existsSync(legacy) ? legacy : current));
+const out = path.join(process.cwd(), "deploy", "vedra.db");
 const tmp = `${out}.${process.pid}.tmp`;
 const PRIVATE = ["orders", "checkouts", "subscribers", "messages", "activity", "review_requests", "media"];
 
@@ -33,4 +36,4 @@ const n = (t, where = "") => (tables.includes(t) ? db.prepare(`SELECT COUNT(*) A
 const summary = `${n("products")} products, ${n("collections")} collections, ${n("reviews")} reviews (${n("reviews", "WHERE json_extract(data, '$.verified') = 1")} verified)`;
 db.close();
 fs.renameSync(tmp, out);
-console.log(`deploy/verda.db: ${summary}, ${fs.statSync(out).size} bytes`);
+console.log(`deploy/vedra.db: ${summary}, ${fs.statSync(out).size} bytes`);

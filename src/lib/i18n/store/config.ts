@@ -9,9 +9,8 @@ import type { Locale } from "@/lib/types";
 export type { Locale };
 
 export const LOCALES: Locale[] = ["en", "ar"];
-export const DEFAULT_LOCALE: Locale = "en";
 /** Remembers the shopper's language choice (set by the language switcher, read by the proxy). */
-export const LANG_COOKIE = "verda_lang";
+export const LANG_COOKIE = "vedra_lang";
 
 export const isLocale = (v: unknown): v is Locale => v === "en" || v === "ar";
 export const asLocale = (v: unknown): Locale => (v === "ar" ? "ar" : "en");
@@ -85,6 +84,3 @@ export const formatNumber = (n: number) => egp.format(n);
 // HTML and the browser render differ (a hydration error on the product page reviews), so it's dropped before the year
 export const formatDate = (d: Date | string, locale: Locale, opts: Intl.DateTimeFormatOptions = { day: "numeric", month: "short", year: "numeric" }) =>
   new Date(d).toLocaleDateString(intlLocale(locale), opts).replace(/،\s*(?=[\d٠-٩]{4})/, " ");
-
-/** Wrap a left-to-right run (phone, order number, code) so it never reorders inside Arabic text. */
-export const ltr = (s: string | number) => `⁦${s}⁩`;

@@ -70,7 +70,7 @@ export function verifyTotp(secretB32: string, code: string, at = Date.now()): nu
 
 export const totpEnabled = () => !!kvGet("totp_secret");
 
-export function otpauthUrl(secretB32: string, account = "admin", issuer = "VERDA Admin") {
+export function otpauthUrl(secretB32: string, account = "admin", issuer = "VEDRA Admin") {
   const label = encodeURIComponent(`${issuer}:${account}`);
   return `otpauth://totp/${label}?secret=${secretB32}&issuer=${encodeURIComponent(issuer)}&algorithm=SHA1&digits=${DIGITS}&period=${STEP}`;
 }

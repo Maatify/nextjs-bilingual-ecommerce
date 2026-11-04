@@ -227,7 +227,7 @@ export function ImportDrawer({ open, onClose }: { open: boolean; onClose: () => 
   const [was, setWas] = useState(open);
   if (was !== open) {
     setWas(open);
-    if (open) (setCsv(null), setRows(null), setError(null), setFileName(""));
+    if (open) { setCsv(null); setRows(null); setError(null); setFileName(""); }
   }
 
   const pick = async (file: File | undefined) => {

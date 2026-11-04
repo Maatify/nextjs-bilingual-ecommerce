@@ -132,12 +132,12 @@ export function sanitizeRichText(input: string, maxLen = 20000): string {
       if (stack.includes("a")) continue;
       const href = safeHref(attr(m[2] ?? "", "href") ?? "");
       if (!href) continue;
-      if (!stack.length) (out += "<p>"), stack.push("p");
+      if (!stack.length) { out += "<p>"; stack.push("p"); }
       out += `<a href="${href}" rel="noopener noreferrer nofollow" target="_blank">`;
       stack.push("a");
       continue;
     }
-    if (!BLOCK.has(tag) && tag !== "li" && !stack.length) (out += "<p>"), stack.push("p");
+    if (!BLOCK.has(tag) && tag !== "li" && !stack.length) { out += "<p>"; stack.push("p"); }
     out += `<${tag}>`;
     stack.push(tag);
   }

@@ -15,7 +15,7 @@ const offer = { bogoEnabled: false, bogo: { buy: 2, get: 1 }, multiBuy: { enable
 
 let payments: { cod: boolean; card: boolean; wallet: boolean; installments: boolean };
 
-(globalThis as { __verdaStore?: { snapshot: () => StoreSnapshot } }).__verdaStore = {
+(globalThis as { __vedraStore?: { snapshot: () => StoreSnapshot } }).__vedraStore = {
   snapshot: () =>
     ({
       products: [product],

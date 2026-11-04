@@ -225,7 +225,7 @@ export async function deleteDrafts(ids: string[]): Promise<ActionResult<number>>
     let n = 0;
     for (const id of ids) {
       const o = getOrder(id);
-      if (o?.status === "draft") (deleteOrder(id), n++);
+      if (o?.status === "draft") { deleteOrder(id); n++; }
     }
     published(`Deleted ${n} draft order${n === 1 ? "" : "s"}`);
     revalidatePath("/admin/orders/drafts");

@@ -20,7 +20,7 @@ async function prepare(page: Page) {
   // the welcome pop-up must not cover the buttons; recent-purchase toasts off for a stable run
   await page.addInitScript(() => {
     try {
-      localStorage.setItem("verda:welcome", String(Date.now()));
+      localStorage.setItem("vedra:welcome", String(Date.now()));
     } catch {}
   });
   await page.route("**/api/recent-purchases**", (r) => r.fulfill({ status: 200, contentType: "application/json", body: "[]" }));
@@ -34,7 +34,7 @@ async function prepare(page: Page) {
 const curtainGone = (page: Page) =>
   page.waitForFunction(() => [...document.querySelectorAll(".vc-curtain, .vc-under")].every((el) => el.getBoundingClientRect().bottom <= 0));
 
-const cartLines = (page: Page) => page.evaluate(() => (JSON.parse(localStorage.getItem("verda:v1") ?? "{}").cart ?? []) as { qty: number }[]);
+const cartLines = (page: Page) => page.evaluate(() => (JSON.parse(localStorage.getItem("vedra:v1") ?? "{}").cart ?? []) as { qty: number }[]);
 
 test("purchase flow (EN) + Arabic RTL", async ({ page, browserName }) => {
   const problems = await prepare(page);

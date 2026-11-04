@@ -9,7 +9,7 @@
  */
 
 export type AdminLocale = "en" | "ar";
-export const ADMIN_LANG_COOKIE = "verda_admin_lang";
+export const ADMIN_LANG_COOKIE = "vedra_admin_lang";
 export const DEFAULT_ADMIN_LOCALE: AdminLocale = "ar";
 export const ADMIN_LOCALES: AdminLocale[] = ["ar", "en"];
 export const isAdminLocale = (v: unknown): v is AdminLocale => v === "en" || v === "ar";

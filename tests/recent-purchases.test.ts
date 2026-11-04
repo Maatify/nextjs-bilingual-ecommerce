@@ -10,7 +10,7 @@ import path from "node:path";
  */
 
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), "store-test-"));
-process.env.VERDA_DB = path.join(dir, "store.db");
+process.env.VEDRA_DB = path.join(dir, "store.db");
 after(() => fs.rmSync(dir, { recursive: true, force: true }));
 
 test("only confirmed-or-later, non-demo orders from the window are listed", async () => {

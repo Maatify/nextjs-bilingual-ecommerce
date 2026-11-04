@@ -2,6 +2,17 @@
   "name": "nextjs-bilingual-ecommerce",
   "version": "0.1.0",
   "private": true,
+  "description": "Bilingual (English/Arabic, RTL) Next.js 16 e-commerce storefront and admin dashboard",
+  "license": "UNLICENSED",
+  "author": "Maatify (https://maatify.dev)",
+  "homepage": "https://vedra.showcase.maatify.dev/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Maatify/nextjs-bilingual-ecommerce.git"
+  },
+  "engines": {
+    "node": ">=22.18"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,7 +20,7 @@
     "db:snapshot": "node scripts/db-snapshot.mjs",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
-    "test": "node --import ./tests/setup/register.mjs --test \"tests/**/*.test.ts\"",
+    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --import ./tests/setup/register.mjs --test \"tests/**/*.test.ts\"",
     "test:smoke": "node scripts/smoke.mjs",
     "security:check": "npm audit --omit=dev && node scripts/security-tests.mjs --safe",
     "optimize:images": "node scripts/optimize-images.mjs",

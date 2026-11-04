@@ -1,10 +1,12 @@
 import { cookies } from "next/headers";
 import { ADMIN_LANG_COOKIE, DEFAULT_ADMIN_LOCALE, isAdminLocale, makeFormat, type AdminLocale } from "./core";
 import { makeT } from "./index";
+import { legacyKey } from "@/lib/legacy-name";
 
-/** Admin locale from the `verda_admin_lang` cookie (default Arabic). Server components, actions and route handlers. */
+/** Admin locale from the `vedra_admin_lang` cookie (default Arabic). Server components, actions and route handlers. */
 export async function getAdminLocale(): Promise<AdminLocale> {
-  const v = (await cookies()).get(ADMIN_LANG_COOKIE)?.value;
+  const jar = await cookies();
+  const v = jar.get(ADMIN_LANG_COOKIE)?.value ?? jar.get(legacyKey(ADMIN_LANG_COOKIE))?.value;
   return isAdminLocale(v) ? v : DEFAULT_ADMIN_LOCALE;
 }
 

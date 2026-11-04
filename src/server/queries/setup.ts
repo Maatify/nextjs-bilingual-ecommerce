@@ -16,7 +16,7 @@ export interface SetupStep {
 
 const DISMISS_KEY = "setup_guide_dismissed";
 const PLACEHOLDER_WHATSAPP = "201000000000";
-const PLACEHOLDER_EMAIL = "care@verda.store";
+const PLACEHOLDER_EMAIL = "care@vedra.store";
 
 function activityMatches(action: string, detailLike?: string) {
   const db = getDb();

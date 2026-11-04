@@ -3,10 +3,10 @@
  * Secure deployments use the `__Host-` prefix: the browser then only accepts the cookie when it is Secure,
  * Path=/ and has no Domain — so a subdomain or a plain-http MITM can't plant or overwrite it.
  */
-export const SESSION_COOKIE = "verda_admin";
-export const SESSION_COOKIE_SECURE = "__Host-verda_admin";
-export const CHALLENGE_COOKIE = "verda_2fa";
-export const CHALLENGE_COOKIE_SECURE = "__Host-verda_2fa";
+export const SESSION_COOKIE = "vedra_admin";
+export const SESSION_COOKIE_SECURE = "__Host-vedra_admin";
+export const CHALLENGE_COOKIE = "vedra_2fa";
+export const CHALLENGE_COOKIE_SECURE = "__Host-vedra_2fa";
 
 /** Hosts where a plain-http production build may be tested: loopback and private-LAN IP literals only. */
 const LOCAL_HOST = /^(localhost|127(?:\.\d{1,3}){3}|\[::1\]|10(?:\.\d{1,3}){3}|192\.168(?:\.\d{1,3}){2}|172\.(?:1[6-9]|2\d|3[01])(?:\.\d{1,3}){2})(?::\d+)?$/i;
@@ -27,7 +27,7 @@ export function secureCookies(h?: Headers): boolean {
   if (proto !== "https" && LOCAL_HOST.test(host)) return false;
   if (!warned) {
     warned = true;
-    console.warn(`[verda] ADMIN_INSECURE_COOKIE is set but this request is ${proto || "?"}://${host || "?"} — ignoring it (secure cookies stay on). Remove it from the production environment.`);
+    console.warn(`[vedra] ADMIN_INSECURE_COOKIE is set but this request is ${proto || "?"}://${host || "?"} — ignoring it (secure cookies stay on). Remove it from the production environment.`);
   }
   return true;
 }

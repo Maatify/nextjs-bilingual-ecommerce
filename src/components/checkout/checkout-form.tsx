@@ -22,7 +22,7 @@ import { deliveryWindow, ORDER_KEY, type OrderSnapshot, type PaymentMethod } fro
 import { PromoField } from "./promo-field";
 import { SummaryLines, TotalsList } from "./summary";
 
-const DRAFT_KEY = "verda:checkoutDraft";
+const DRAFT_KEY = "vedra:checkoutDraft";
 
 interface Form {
   phone: string;
@@ -112,7 +112,7 @@ function loadDraft(): Form {
   }
 }
 
-const CHECKOUT_SESSION_KEY = "verda_checkout_session";
+const CHECKOUT_SESSION_KEY = "vedra_checkout_session";
 /** One id per checkout session (per tab) for the abandoned-checkout beacon; reset after an order is placed. */
 function checkoutSessionId() {
   try {

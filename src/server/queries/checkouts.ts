@@ -9,17 +9,17 @@ import { variantPrice } from "@/lib/variants";
  * same phone (or email) placed after the checkout started.
  */
 
-type G = typeof globalThis & { __verdaCheckoutsReady?: boolean };
+type G = typeof globalThis & { __vedraCheckoutsReady?: boolean };
 const g = globalThis as G;
 
 function db() {
   const d = getDb();
-  if (!g.__verdaCheckoutsReady) {
+  if (!g.__vedraCheckoutsReady) {
     d.exec(`
       CREATE TABLE IF NOT EXISTS checkouts (id TEXT PRIMARY KEY, created_at TEXT NOT NULL, updated_at TEXT NOT NULL, phone TEXT, email TEXT, data TEXT NOT NULL);
       CREATE INDEX IF NOT EXISTS checkouts_updated ON checkouts(updated_at);
     `);
-    g.__verdaCheckoutsReady = true;
+    g.__vedraCheckoutsReady = true;
   }
   return d;
 }

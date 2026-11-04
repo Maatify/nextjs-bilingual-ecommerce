@@ -36,7 +36,7 @@ function getDrawerLinks(nav: NavItem[], tileHandles: Set<string>, locale: Locale
   return [...extra, ...nav];
 }
 
-/** "VERDA" → "Verda" for the poster-type wordmark. */
+/** "VEDRA" → "Vedra" for the poster-type wordmark. */
 const wordmark = (name: string) => name.replace(/\S+/g, (w) => w[0].toUpperCase() + w.slice(1).toLowerCase());
 
 const quick = (d: Dict): { l: string; h: string; i: IconName }[] => [
