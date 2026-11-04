@@ -419,7 +419,7 @@ Being upfront about what isn't done:
 - **No online payment gateway.** Cash on delivery is the only payment flow. The card, wallet and installments options exist in the checkout UI and in Settings, but `gatewayReady()` in [`src/lib/checkout.ts`](src/lib/checkout.ts) keeps them hidden and the order API rejects them until a gateway is integrated; the prepaid discount never applies without one.
 - **Placeholder business details** (phone, WhatsApp number, email, social links, domain, legal name) appear in the footer, JSON-LD and `llms.txt`. Replace them in Admin → Settings before real use.
 - **Sample data**: 131 sample reviews and sample promo codes (active, without usage limits or end dates) in the demo database. Remove the reviews in Admin → Backup → clear demo data and set up your own codes before launch.
-- **Demo deployment storage**: the live demo runs on Vercel with an ephemeral copy of the SQLite database, so orders and admin changes there are lost whenever the instance restarts. See [Deployment](#deployment).
+- **Demo data resets**: the [live demo](https://vedra.showcase.maatify.dev/) starts from the `deploy/` snapshot and resets on every deploy, so orders and admin changes made there don't last. See [Deployment](#deployment).
 - **Mobile LCP** on product and collection pages (85–86 in Lighthouse 13.6) as explained above.
 - Catalog photos are 960 px wide, so they look slightly soft on retina desktops.
 - Tailwind 4 needs Safari / iOS 16.4 or newer; older iOS gets degraded styling.
@@ -507,7 +507,7 @@ npm start
 ```
 
 - **Production**: the store keeps everything (orders, settings, admin password, sessions, rate limits) in the SQLite file in `data/`, so it needs a **persistent disk**: for example a VPS running `npm start` behind a reverse proxy such as nginx, with `TRUST_PROXY_HOPS` set to the number of proxies so rate limits see the real client IP, and `ADMIN_INSECURE_COOKIE` left empty. Back up `data/` regularly. Using an external database instead would mean replacing `src/server/store.ts`.
-- **The live demo** runs on Vercel, where the filesystem is ephemeral: each instance starts from the `deploy/` snapshot, and orders or admin edits disappear when it restarts. That is fine for a demo, not for a real store.
+- **The live demo** at [vedra.showcase.maatify.dev](https://vedra.showcase.maatify.dev/) starts from the `deploy/` snapshot and resets on every deploy; orders placed there are not fulfilled. A real store keeps its SQLite file on persistent storage and backs it up.
 - Before taking real orders: replace every placeholder (phone, WhatsApp, email, domain, legal name, social links), clear the sample reviews, review the promo codes, change the admin password and turn on two-factor auth.
 
 ---
